@@ -2,9 +2,12 @@ import { Account } from 'src/account/entities/Account';
 import { CreateAccountRepository } from '../../interfaces/CreateAccountRepository';
 import { PrismaService } from 'src/database/services/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { FindAccountByEmailRepository } from 'src/database/interfaces/FindAccountByEmailRepository';
 
 @Injectable()
-export class AccountPrismaRepository implements CreateAccountRepository {
+export class AccountPrismaRepository
+  implements CreateAccountRepository, FindAccountByEmailRepository
+{
   constructor(private readonly prismaService: PrismaService) {}
 
   private domainToPrismaData(account: Account) {
@@ -18,9 +21,20 @@ export class AccountPrismaRepository implements CreateAccountRepository {
 
   async save(account: Account): Promise<void> {
     const data = this.domainToPrismaData(account);
-    console.log(account);
+
     await this.prismaService.account.create({
       data,
     });
+  }
+
+  async findByMail(email: string): Promise<Account> {
+    const accountData = await this.prismaService.account.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!accountData) return null;
+    return new Account(accountData);
   }
 }
