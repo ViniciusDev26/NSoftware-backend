@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Crypter } from 'src/shared/cryptography/protocols/crypter';
-import { Account } from '../entities/Account';
+import { Account } from '../../shared/entities/Account';
 import { CreateAccountRepository } from 'src/database/interfaces/CreateAccountRepository';
 import { FindAccountByEmailRepository } from 'src/database/interfaces/FindAccountByEmailRepository';
 import { EmailAlreadyUsedException } from '../exceptions/email-already-used.exception';

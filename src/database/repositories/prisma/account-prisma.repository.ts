@@ -1,4 +1,4 @@
-import { Account } from 'src/account/entities/Account';
+import { Account } from 'src/shared/entities/Account';
 import { CreateAccountRepository } from '../../interfaces/CreateAccountRepository';
 import { PrismaService } from 'src/database/services/prisma.service';
 import { Injectable } from '@nestjs/common';
