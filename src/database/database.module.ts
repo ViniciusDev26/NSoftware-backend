@@ -3,6 +3,7 @@ import { AccountPrismaRepository } from './repositories/prisma/account-prisma.re
 import { CreateAccountRepository } from './interfaces/CreateAccountRepository';
 import { PrismaService } from './services/prisma.service';
 import { FindAccountByEmailRepository } from './interfaces/FindAccountByEmailRepository';
+import { productPrismaRepository } from './repositories/prisma/product-prisma.repository';
 
 @Global()
 @Module({
@@ -16,7 +17,12 @@ import { FindAccountByEmailRepository } from './interfaces/FindAccountByEmailRep
       provide: FindAccountByEmailRepository,
       useClass: AccountPrismaRepository,
     },
+    productPrismaRepository,
   ],
-  exports: [CreateAccountRepository, FindAccountByEmailRepository],
+  exports: [
+    CreateAccountRepository,
+    FindAccountByEmailRepository,
+    productPrismaRepository,
+  ],
 })
 export class DatabaseModule {}

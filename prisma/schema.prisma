@@ -11,10 +11,70 @@ datasource db {
 }
 
 model Account {
-  id       String @default(uuid())
-  name     String
-  email    String @unique
-  password String
+  id         String  @default(uuid())
+  companyId  Int?
+  AddresssId Int?
+  name       String
+  email      String  @unique
+  password   String
+  role       String?
+  wage       Int?
+  obs        String?
 
   @@map("accounts")
+}
+
+model Address {
+  id          Int     @unique @default(autoincrement())
+  idAccount   Int
+  lat         String
+  lng         String
+  street      String
+  houseNumber Int
+  obs         String
+}
+
+model Companys {
+  id          Int    @unique @default(autoincrement())
+  companyCode String
+  companyName String
+  access      String
+}
+
+model Products {
+  id        Int      @unique @default(autoincrement())
+  companyId Int
+  name      String
+  value     Int
+  image     String
+  sizesId   Int
+  recipeId  Int?
+}
+
+model Sizes {
+  id Int @unique @default(autoincrement())
+  size String
+  productId Int
+}
+
+model Order {
+  id        Int      @unique @default(autoincrement())
+  companyId Int
+  productId String
+  userId    Int
+  status    String
+  date      DateTime
+  pathImage String
+  obs       String?
+  value     Int
+  size      String
+}
+
+model Stock {
+  id        Int    @unique @default(autoincrement())
+  companyId Int
+  name      String
+  unidade   String
+  unitPrice Int
+  quantity  Int
 }
