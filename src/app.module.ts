@@ -4,6 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { productModule } from './product/product.module';
+import { orderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { productModule } from './product/product.module';
     DatabaseModule,
     SharedModule,
     productModule,
+    orderModule,
   ],
   controllers: [],
   providers: [],

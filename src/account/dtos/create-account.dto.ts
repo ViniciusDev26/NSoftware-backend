@@ -13,4 +13,7 @@ export abstract class CreateAccountDTO {
   @IsString()
   @ApiProperty()
   password: string;
+
+  @ApiProperty()
+  companyId: number;
 }

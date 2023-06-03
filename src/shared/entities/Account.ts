@@ -3,6 +3,12 @@ interface AccountProperties {
   name: string;
   email: string;
   password: string;
+  companyId: number;
+  AddressId?: number;
+  role?: string;
+  wage?: number;
+  obs?: string;
+  codeEmployee?: number;
 }
 
 export class Account {
@@ -26,5 +32,29 @@ export class Account {
 
   get password() {
     return this.properties.password;
+  }
+
+  get companyId() {
+    return this.properties.companyId;
+  }
+
+  get role() {
+    return this.properties.role;
+  }
+
+  get wage() {
+    return this.properties.wage;
+  }
+
+  get obs() {
+    return this.properties.obs;
+  }
+
+  get codeEmployee() {
+    return this.properties.codeEmployee;
+  }
+
+  get AddressId() {
+    return this.properties.AddressId;
   }
 }

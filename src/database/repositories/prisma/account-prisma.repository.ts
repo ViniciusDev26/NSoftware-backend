@@ -16,12 +16,17 @@ export class AccountPrismaRepository
       name: account.name,
       email: account.email,
       password: account.password,
+      codeEmployee: account.codeEmployee,
+      AddressId: account.AddressId,
+      role: account.role,
+      wage: account.wage,
+      obs: account.obs,
+      companyId: account.companyId,
     };
   }
 
   async save(account: Account): Promise<void> {
     const data = this.domainToPrismaData(account);
-
     await this.prismaService.account.create({
       data,
     });

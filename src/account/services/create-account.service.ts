@@ -9,6 +9,12 @@ interface CreateAccountServiceParams {
   name: string;
   email: string;
   password: string;
+  companyId: number;
+  AddressId?: number;
+  role?: string;
+  wage?: number;
+  obs?: string;
+  codeEmployee?: number;
 }
 
 @Injectable()
@@ -30,6 +36,12 @@ export class CreateAccountService {
       name: params.name,
       email: params.email,
       password: hashPassword,
+      companyId: params.companyId,
+      AddressId: params.AddressId,
+      codeEmployee: params.codeEmployee,
+      wage: params.wage,
+      obs: params.obs,
+      role: params.obs,
     });
 
     await this.createAccountRepository.save(account);

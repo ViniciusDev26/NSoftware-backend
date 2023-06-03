@@ -11,21 +11,22 @@ datasource db {
 }
 
 model Account {
-  id         String  @default(uuid())
-  companyId  Int?
-  AddresssId Int?
-  name       String
-  email      String  @unique
-  password   String
-  role       String?
-  wage       Int?
-  obs        String?
+  id           String  @default(uuid())
+  companyId    Int?
+  AddressId    Int?
+  name         String
+  email        String  @unique
+  password     String
+  role         String?
+  wage         Int?
+  obs          String?
+  codeEmployee Int?
 
   @@map("accounts")
 }
 
 model Address {
-  id          Int     @unique @default(autoincrement())
+  id          Int    @unique @default(autoincrement())
   idAccount   Int
   lat         String
   lng         String
@@ -35,39 +36,52 @@ model Address {
 }
 
 model Companys {
-  id          Int    @unique @default(autoincrement())
-  companyCode String
-  companyName String
-  access      String
+  id           Int    @unique @default(autoincrement())
+  companyCode  String
+  codeEmployee Int
+  companyName  String
+  access       String
 }
 
 model Products {
-  id        Int      @unique @default(autoincrement())
-  companyId Int
-  name      String
-  value     Int
-  image     String
-  sizesId   Int
-  recipeId  Int?
+  id              Int               @unique @default(autoincrement())
+  companyId       Int
+  name            String
+  value           Int
+  image           String
+  sizesId         Int
+  recipeId        Int?
+  RelationRequest RelationRequest[]
 }
 
 model Sizes {
-  id Int @unique @default(autoincrement())
-  size String
+  id        Int    @unique @default(autoincrement())
+  size      String
   productId Int
 }
 
 model Order {
   id        Int      @unique @default(autoincrement())
   companyId Int
-  productId String
+  priority  Boolean
   userId    Int
   status    String
   date      DateTime
-  pathImage String
   obs       String?
   value     Int
   size      String
+
+  RelationRequest RelationRequest[]
+}
+
+model RelationRequest {
+  id        Int @unique @default(autoincrement())
+  productId Int
+  quantity  Int
+  orderId   Int
+
+  order   Order    @relation(fields: [orderId], references: [id])
+  product Products @relation(fields: [productId], references: [id])
 }
 
 model Stock {

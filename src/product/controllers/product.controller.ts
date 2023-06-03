@@ -7,12 +7,11 @@ export class productController {
 
   @Get('/')
   async getProduct(@Query() query): Promise<any> {
-    const { companyID } = query;
-    if (!companyID) {
-      return { Error: 'Favor informar companyID' };
+    const { companyID, page } = query;
+    if (!companyID || !page) {
+      return { Error: 'Invalid params' };
     }
-    const idTransform = parseInt(companyID);
-    const service = await this.ProductService.execute(idTransform);
+    const service = await this.ProductService.execute(companyID, page);
     return service;
   }
 
