@@ -10,7 +10,7 @@ export class orderPrismaRepository implements OrderRepository {
   constructor(readonly prisma: PrismaService) {}
 
   async registerOrder(params: orderProps) {
-    const { companyId, priority, size, userId, value, obs } = params;
+    const { companyId, priority, size, userId, value, obs, lat, lng } = params;
     try {
       const register = await this.prisma.order.create({
         data: {
@@ -22,6 +22,8 @@ export class orderPrismaRepository implements OrderRepository {
           status: 'Novo',
           value,
           obs,
+          lat,
+          lng,
         },
       });
       return register;

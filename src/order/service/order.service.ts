@@ -12,6 +12,8 @@ type orderPros = {
   size: string;
   id: number;
   page: number;
+  lat?: string;
+  lng?: string;
 };
 @Injectable()
 export class orderService {

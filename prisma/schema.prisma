@@ -26,13 +26,15 @@ model Account {
 }
 
 model Address {
-  id          Int    @unique @default(autoincrement())
-  idAccount   Int
+  id        Int @unique @default(autoincrement())
+  idAccount Int
+
   lat         String
   lng         String
   street      String
   houseNumber Int
-  obs         String
+  district    String
+  obs         String?
 }
 
 model Companys {
@@ -70,6 +72,8 @@ model Order {
   obs       String?
   value     Int
   size      String
+  lat       String?
+  lng       String?
 
   RelationRequest RelationRequest[]
 }

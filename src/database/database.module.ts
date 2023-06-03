@@ -5,6 +5,7 @@ import { PrismaService } from './services/prisma.service';
 import { FindAccountByEmailRepository } from './interfaces/FindAccountByEmailRepository';
 import { productPrismaRepository } from './repositories/prisma/product-prisma.repository';
 import { orderPrismaRepository } from './repositories/prisma/order-prisma.repository';
+import { addressPrismaRepository } from './repositories/prisma/address.prisma.repository';
 
 @Global()
 @Module({
@@ -19,6 +20,7 @@ import { orderPrismaRepository } from './repositories/prisma/order-prisma.reposi
       useClass: AccountPrismaRepository,
     },
     productPrismaRepository,
+    addressPrismaRepository,
     orderPrismaRepository,
   ],
   exports: [
@@ -26,6 +28,7 @@ import { orderPrismaRepository } from './repositories/prisma/order-prisma.reposi
     FindAccountByEmailRepository,
     productPrismaRepository,
     orderPrismaRepository,
+    addressPrismaRepository,
   ],
 })
 export class DatabaseModule {}

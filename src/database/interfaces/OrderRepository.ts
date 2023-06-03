@@ -11,6 +11,8 @@ export type orderProps = {
   value: number;
   size: string;
   page: number;
+  lng?: string;
+  lat?: string;
 };
 
 export interface OrderRepository {
