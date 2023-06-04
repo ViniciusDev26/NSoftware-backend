@@ -1,7 +1,7 @@
 import { Account } from 'src/shared/entities/Account';
 import { CreateAccountRepository } from '../../interfaces/CreateAccountRepository';
 import { PrismaService } from 'src/database/services/prisma.service';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FindAccountByEmailRepository } from 'src/database/interfaces/FindAccountByEmailRepository';
 
 @Injectable()
@@ -27,9 +27,37 @@ export class AccountPrismaRepository
 
   async save(account: Account): Promise<void> {
     const data = this.domainToPrismaData(account);
-    await this.prismaService.account.create({
+    const { codeEmployee } = account;
+    if (codeEmployee) {
+      const verifyCodeEmployee = await this.prismaService.companys.findFirst({
+        where: {
+          codeEmployee,
+        },
+      });
+      if (verifyCodeEmployee) {
+        await this.prismaService.account.create({
+          data,
+        });
+        throw new HttpException('Success', HttpStatus.ACCEPTED);
+      }
+
+      throw new HttpException(
+        'Error - Código não reconhecido',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    const create = await this.prismaService.account.create({
       data,
     });
+
+    if (!create) {
+      throw new HttpException(
+        'Error - Não foi possível cadastrar usuário',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    throw new HttpException('Success', HttpStatus.ACCEPTED);
   }
 
   async findByMail(email: string): Promise<Account> {
@@ -41,5 +69,14 @@ export class AccountPrismaRepository
 
     if (!accountData) return null;
     return new Account(accountData);
+  }
+
+  async login(params) {
+    const handleLogin = await this.prismaService.account.findFirst({
+      where: {
+        email: params.email,
+        password: params.password,
+      },
+    });
   }
 }
