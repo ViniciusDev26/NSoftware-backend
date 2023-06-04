@@ -8,6 +8,7 @@ type addressProops = {
   houseNumber: number;
   district: string;
   obs?: string;
+  id: number;
 };
 
 @Injectable()
@@ -18,5 +19,22 @@ export class addressPrismaRepository {
       data,
     });
     return saveInBd;
+  }
+
+  async change(params: addressProops) {
+    const changeAddress = await this.Prisma.address.update({
+      where: {
+        id: params.id,
+      },
+      data: {
+        lat: params.lat,
+        lng: params.lng,
+        district: params.district,
+        houseNumber: params.houseNumber,
+        obs: params.obs,
+        street: params.street,
+      },
+    });
+    return changeAddress;
   }
 }

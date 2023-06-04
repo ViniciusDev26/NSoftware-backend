@@ -9,6 +9,7 @@ type addressProops = {
   houseNumber: number;
   district: string;
   obs?: string;
+  id: number;
 };
 
 @Injectable()
@@ -21,5 +22,14 @@ export class AddressService {
     }
     const saveAddress = this.address.save(params);
     return saveAddress;
+  }
+
+  async change(params: addressProops) {
+    const { idAccount, id } = params;
+    if (!idAccount || !id) {
+      return { Error: 'Invalid params' };
+    }
+    const changeAddress = this.address.change(params);
+    return changeAddress;
   }
 }
