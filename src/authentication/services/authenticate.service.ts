@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FindAccountByEmailRepository } from 'src/database/interfaces/FindAccountByEmailRepository';
 import { JwtPayloadModel } from '../models/jwt-payload.model';
 import { JwtService } from '@nestjs/jwt';
 import { HashComparer } from 'src/shared/cryptography/protocols/hash-comparer';
+import { authorizationRepository } from 'src/database/repositories/prisma/authentication-prisma.repository';
 
 interface AuthenticateServiceParams {
   email: string;
@@ -15,6 +16,7 @@ export class AuthenticateService {
     private readonly findAccountByEmailRepository: FindAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
     private readonly jwtService: JwtService,
+    private readonly repository: authorizationRepository,
   ) {}
 
   async execute(params: AuthenticateServiceParams) {
@@ -23,22 +25,35 @@ export class AuthenticateService {
     );
     if (!account) return null;
 
-    const isCorrectPassword = this.hashComparer.comparer(
+    const statusCompany = await this.repository.getStausByCompany(
+      account.email,
+    );
+
+    const isCorrectPassword = await this.hashComparer.comparer(
       account.password,
       params.password,
     );
 
-    if (!isCorrectPassword) return null;
+    if (!isCorrectPassword) {
+      throw new HttpException(
+        'Error - Email ou senha incorretos',
+        HttpStatus.CONFLICT,
+      );
+    }
 
     const payload: JwtPayloadModel = {
       id: account.id,
       email: account.email,
     };
-
     const token = this.jwtService.sign(payload);
 
-    return {
-      accessToken: token,
-    };
+    if (statusCompany) {
+      return {
+        accessToken: token,
+        statusCompany,
+      };
+    }
+
+    return { accessToken: token };
   }
 }

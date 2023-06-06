@@ -5,7 +5,7 @@ interface AccountProperties {
   password: string;
   companyId: number;
   AddressId?: number;
-  role?: string;
+  roleId?: number;
   wage?: number;
   obs?: string;
   codeEmployee?: number;
@@ -38,8 +38,8 @@ export class Account {
     return this.properties.companyId;
   }
 
-  get role() {
-    return this.properties.role;
+  get roleId() {
+    return this.properties.roleId;
   }
 
   get wage() {

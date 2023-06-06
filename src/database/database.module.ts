@@ -7,6 +7,9 @@ import { productPrismaRepository } from './repositories/prisma/product-prisma.re
 import { orderPrismaRepository } from './repositories/prisma/order-prisma.repository';
 import { addressPrismaRepository } from './repositories/prisma/address.prisma.repository';
 import { companysPrismaRepository } from './repositories/prisma/company-prisma.repository';
+import { authorizationRepository } from './repositories/prisma/authentication-prisma.repository';
+import { employeeRepository } from './repositories/prisma/employee-prisma.repository';
+import { roleRepository } from './repositories/prisma/role-prisma.repository';
 
 @Global()
 @Module({
@@ -24,6 +27,9 @@ import { companysPrismaRepository } from './repositories/prisma/company-prisma.r
     addressPrismaRepository,
     orderPrismaRepository,
     companysPrismaRepository,
+    authorizationRepository,
+    employeeRepository,
+    roleRepository,
   ],
   exports: [
     CreateAccountRepository,
@@ -32,6 +38,9 @@ import { companysPrismaRepository } from './repositories/prisma/company-prisma.r
     orderPrismaRepository,
     addressPrismaRepository,
     companysPrismaRepository,
+    authorizationRepository,
+    employeeRepository,
+    roleRepository,
   ],
 })
 export class DatabaseModule {}

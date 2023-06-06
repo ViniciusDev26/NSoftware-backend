@@ -3,8 +3,6 @@ import { Crypter } from 'src/shared/cryptography/protocols/crypter';
 import { Account } from '../../shared/entities/Account';
 import { CreateAccountRepository } from 'src/database/interfaces/CreateAccountRepository';
 import { FindAccountByEmailRepository } from 'src/database/interfaces/FindAccountByEmailRepository';
-import { EmailAlreadyUsedException } from '../exceptions/email-already-used.exception';
-import { AccountPrismaRepository } from 'src/database/repositories/prisma/account-prisma.repository';
 
 interface CreateAccountServiceParams {
   name: string;
@@ -12,7 +10,7 @@ interface CreateAccountServiceParams {
   password: string;
   companyId: number;
   AddressId?: number;
-  role?: string;
+  roleId?: number;
   wage?: number;
   obs?: string;
   codeEmployee?: number;
@@ -31,7 +29,6 @@ export class CreateAccountService {
     if (alreadyExists) {
       throw new HttpException('Error - Email já em uso', HttpStatus.CONFLICT);
     }
-
     const hashPassword = await this.crypter.encrypt(params.password);
     const account = new Account({
       name: params.name,
@@ -42,7 +39,7 @@ export class CreateAccountService {
       codeEmployee: params.codeEmployee,
       wage: params.wage,
       obs: params.obs,
-      role: params.obs,
+      roleId: params.roleId,
     });
 
     await this.createAccountRepository.save(account);

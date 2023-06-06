@@ -18,7 +18,7 @@ export class AccountPrismaRepository
       password: account.password,
       codeEmployee: account.codeEmployee,
       AddressId: account.AddressId,
-      role: account.role,
+      roleId: account.roleId,
       wage: account.wage,
       obs: account.obs,
       companyId: account.companyId,
@@ -69,14 +69,5 @@ export class AccountPrismaRepository
 
     if (!accountData) return null;
     return new Account(accountData);
-  }
-
-  async login(params) {
-    const handleLogin = await this.prismaService.account.findFirst({
-      where: {
-        email: params.email,
-        password: params.password,
-      },
-    });
   }
 }

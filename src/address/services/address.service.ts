@@ -15,6 +15,7 @@ type addressProops = {
 @Injectable()
 export class AddressService {
   constructor(readonly address: addressPrismaRepository) {}
+
   async register(params: addressProops) {
     const { idAccount } = params;
     if (!idAccount) {

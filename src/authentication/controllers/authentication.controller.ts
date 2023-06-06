@@ -1,4 +1,11 @@
-import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpException,
+  HttpStatus,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthenticationDTO } from '../dtos/Authentication.dto';
 import { AuthenticateService } from '../services/authenticate.service';
 
@@ -11,7 +18,10 @@ export class AuthenticationController {
     const token = await this.authenticateService.execute(params);
 
     if (!token) {
-      throw new UnauthorizedException('email or password is invalid');
+      throw new HttpException(
+        'Error - Email ou senha incorretos',
+        HttpStatus.CONFLICT,
+      );
     }
 
     return token;
