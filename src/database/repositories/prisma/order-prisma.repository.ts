@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   orderProps,
   OrderRepository,
@@ -22,6 +22,7 @@ export class orderPrismaRepository implements OrderRepository {
       image,
       name,
     } = params;
+
     try {
       const register = await this.prisma.order.create({
         data: {
@@ -40,8 +41,8 @@ export class orderPrismaRepository implements OrderRepository {
         },
       });
       return register;
-    } catch (err) {
-      return err;
+    } catch {
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
   }
 
@@ -74,9 +75,7 @@ export class orderPrismaRepository implements OrderRepository {
       where: {
         id: params.id,
       },
-      data: {
-        status: params.status,
-      },
+      data: params,
     });
     return change;
   }

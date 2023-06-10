@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { companysPrismaRepository } from 'src/database/repositories/prisma/company-prisma.repository';
+import { editCompanyDTO } from '../dtos/editCompany.dot';
 
 type companyProps = {
   access: string;
@@ -21,23 +22,30 @@ export class companyService {
     const { access, codeEmployee, companyCode, companyName } = params;
     const validAccess = ['Básico', 'Premium', 'Prime'];
     if (!access || !codeEmployee || !companyCode || !companyName) {
-      return { error: 'Invalid params' };
+      throw new HttpException('Error - Invalid params', HttpStatus.BAD_REQUEST);
     }
 
     const returnValisAccess = validAccess.find(
       (searchAccess) => access === searchAccess,
     );
     if (!returnValisAccess) {
-      return { Error: 'Invalid paramss' };
+      throw new HttpException('Error - Invalid params', HttpStatus.BAD_REQUEST);
     }
 
     const save = await this.Prisma.createCompany(params);
     return save;
   }
 
-  async getCompany({ codeEmployee }) {
-    const codeFormated = parseInt(codeEmployee);
-    const receive = this.Prisma.receiveCompany(codeFormated);
+  async getCompany({ id }) {
+    const receive = this.Prisma.receiveCompany(id);
     return receive;
+  }
+
+  async patchEnterprise(params: any) {
+    if (!params.companyId) {
+      throw new HttpException('Error - Invalid params', HttpStatus.BAD_REQUEST);
+    }
+    const path = this.Prisma.patchCompany(params);
+    return path;
   }
 }

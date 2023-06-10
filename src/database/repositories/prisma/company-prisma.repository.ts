@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/services/prisma.service';
+
 type companyProps = {
   access: string;
   codeEmployee: number;
@@ -15,27 +16,48 @@ type companyProps = {
 export class companysPrismaRepository {
   constructor(readonly prisma: PrismaService) {}
   async createCompany(data: companyProps) {
-    const create = await this.prisma.companys.create({
-      data,
-    });
-    return create;
+    try {
+      const create = await this.prisma.companys.create({
+        data,
+      });
+      return create;
+    } catch {
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  async receiveCompany(codeEmployee: number) {
+  async receiveCompany(id: number) {
     try {
       const receive = await this.prisma.companys.findFirst({
         where: {
-          codeEmployee,
+          id,
         },
       });
+      return receive;
+    } catch {
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+    }
+  }
 
-      if (!receive) {
-        return { status: 500, message: 'Internal Server Error' };
-      } else {
-        return { status: 200, message: 'OK' };
-      }
-    } catch (error) {
-      return { status: 500, message: 'Internal Server Error' };
+  async patchCompany(data) {
+    try {
+      const edit = await this.prisma.companys.update({
+        where: {
+          id: data.companyId,
+        },
+        data: {
+          lat: data.lat,
+          lng: data.lng,
+          access: data.access,
+          district: data.district,
+          street: data.street,
+          houseNumber: data.houseNumber,
+          companyName: data.companyName,
+        },
+      });
+      return edit;
+    } catch {
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }
 }

@@ -32,10 +32,8 @@ export class CreateAccountService {
   ) {}
 
   async execute(params: CreateAccountServiceParams) {
-    const alreadyExists = await this.findAccountByMail.findByMail(params.email);
-    if (alreadyExists) {
-      throw new HttpException('Error - Email já em uso', HttpStatus.CONFLICT);
-    }
+    await this.findAccountByMail.findByMail(params.email);
+
     const hashPassword = await this.crypter.encrypt(params.password);
     const account = new Account({
       name: params.name,

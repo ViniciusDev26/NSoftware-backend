@@ -39,7 +39,7 @@ export class orderService {
   async makeOrder(params: orderPros) {
     const { companyId, userId, size, value } = params;
     if (!companyId || !userId || !size || !value) {
-      return { Error: 'Invalid Params' };
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
     if (!params.priority) {
       params.priority = false;
@@ -54,12 +54,10 @@ export class orderService {
     const conditionFIlter = filterStatus.find(
       (statusFilter) => statusFilter === status,
     );
-    if (!conditionFIlter) {
-      return { Error: 'Invalid Status' };
-    }
     if (!companyId || !id) {
-      return { Error: 'Invalid Params' };
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
+
     const service = await this.register.changeOnder(params);
     return service;
   }

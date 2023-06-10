@@ -25,7 +25,10 @@ export class AuthenticateService {
     const account = await this.findAccountByEmailRepository.findByMail(
       params.email,
     );
-    if (!account) return null;
+
+    if (!account) {
+      throw new HttpException('Error - Conta inexistente', HttpStatus.CONFLICT);
+    }
 
     const statusCompany = await this.repository.getStausByCompany(
       account.email,

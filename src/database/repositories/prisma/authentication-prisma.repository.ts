@@ -10,32 +10,29 @@ export class authorizationRepository {
         email,
       },
     });
+    const { access, id } = await this.prisma.companys.findUnique({
+      where: {
+        id: getStatus.companyId,
+      },
+    });
 
-    if (getStatus.codeEmployee) {
-      const getStatusForCompany = await this.prisma.companys.findFirst({
+    if (getStatus.roleId) {
+      const role = await this.prisma.role.findUnique({
         where: {
-          codeEmployee: getStatus.codeEmployee,
+          id: getStatus.roleId,
         },
       });
-      if (getStatus.roleId) {
-        const getOrder = await this.prisma.role.findUnique({
-          where: {
-            id: getStatus.roleId,
-          },
-        });
-        return {
-          statusCompany: getStatusForCompany.access,
-          roleUser: getOrder.role,
-          codeEmployee: getStatus.codeEmployee,
-          companyID: getStatusForCompany.id,
-        };
-      }
       return {
-        statusCompany: getStatusForCompany.access,
-        roleUser: 'Sem função',
-        codeEmployee: getStatus.codeEmployee,
-        companyID: getStatusForCompany.id,
+        statusCompany: access,
+        companyID: id,
+        roleUser: role.role,
       };
     }
+
+    return {
+      statusCompany: access,
+      companyID: id,
+      roleUser: 'Sem função',
+    };
   }
 }

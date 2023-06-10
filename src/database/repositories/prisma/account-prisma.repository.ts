@@ -6,7 +6,6 @@ import { FindAccountByEmailRepository } from 'src/database/interfaces/FindAccoun
 import { PatchAccountRepository } from 'src/database/interfaces/patchAccountRepository';
 import { DeleteAccountByIdRepository } from 'src/database/interfaces/DeleteAccountRepository';
 import { getClientsRepository } from 'src/database/interfaces/getClientsRepository';
-import { getAllClientsDTO } from 'src/account/dtos/getAllClients.dto';
 
 @Injectable()
 export class AccountPrismaRepository
@@ -38,35 +37,36 @@ export class AccountPrismaRepository
     const data = this.domainToPrismaData(account);
     const { codeEmployee } = account;
     if (codeEmployee) {
-      const verifyCodeEmployee = await this.prismaService.companys.findFirst({
-        where: {
-          codeEmployee,
-        },
-      });
-      if (verifyCodeEmployee) {
-        await this.prismaService.account.create({
-          data,
+      try {
+        const verifyCodeEmployee = await this.prismaService.companys.findFirst({
+          where: {
+            codeEmployee,
+          },
         });
-        throw new HttpException('Success', HttpStatus.ACCEPTED);
+        if (verifyCodeEmployee) {
+          await this.prismaService.account.create({
+            data,
+          });
+          throw new HttpException('Success', HttpStatus.ACCEPTED);
+        }
+      } catch {
+        throw new HttpException(
+          'Error - Código não reconhecido',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
-
+    }
+    try {
+      await this.prismaService.account.create({
+        data,
+      });
+      throw new HttpException('Success - Usuário salvo', HttpStatus.ACCEPTED);
+    } catch {
       throw new HttpException(
-        'Error - Código não reconhecido',
+        'Error - Erro ao salvar usuário',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-
-    const create = await this.prismaService.account.create({
-      data,
-    });
-
-    if (!create) {
-      throw new HttpException(
-        'Error - Não foi possível cadastrar usuário',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-    throw new HttpException('Success', HttpStatus.ACCEPTED);
   }
 
   async findByMail(email: string): Promise<Account> {
@@ -79,7 +79,7 @@ export class AccountPrismaRepository
       return new Account(accountData);
     } catch {
       throw new HttpException(
-        'Error - Não foi possível encontrar  usuário',
+        'Error - Não foi possível salvar usuário',
         HttpStatus.BAD_REQUEST,
       );
     }
