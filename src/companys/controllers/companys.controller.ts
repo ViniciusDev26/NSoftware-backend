@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { companyService } from '../services/companys.service';
 
-@Controller('company')
+@Controller('/company')
 export class companysController {
   constructor(readonly service: companyService) {}
 

@@ -26,9 +26,8 @@ model Account {
 }
 
 model Address {
-  id        Int @unique @default(autoincrement())
-  idAccount Int
-
+  id          Int     @unique @default(autoincrement())
+  idAccount   Int
   lat         String
   lng         String
   street      String
@@ -43,6 +42,11 @@ model Companys {
   codeEmployee Int    @unique
   companyName  String
   access       String
+  lat          String
+  lng          String
+  street       String
+  houseNumber  Int
+  district     String
 }
 
 model Products {
@@ -64,9 +68,11 @@ model Sizes {
 
 model Order {
   id        Int      @unique @default(autoincrement())
+  name      String   @default("Sem nome")
+  image     String   @default("https://images.tcdn.com.br/img/img_prod/734896/telefone_ramal_sem_fio_ts_5121_preto_2577_1_546d22ba08fae4a55e7ad243dfdc8b90.jpeg")
   companyId Int
   priority  Boolean
-  userId    Int
+  userId    String
   status    String
   date      DateTime
   obs       String?

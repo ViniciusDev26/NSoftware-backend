@@ -10,6 +10,9 @@ import { companysPrismaRepository } from './repositories/prisma/company-prisma.r
 import { authorizationRepository } from './repositories/prisma/authentication-prisma.repository';
 import { employeeRepository } from './repositories/prisma/employee-prisma.repository';
 import { roleRepository } from './repositories/prisma/role-prisma.repository';
+import { PatchAccountRepository } from './interfaces/patchAccountRepository';
+import { DeleteAccountByIdRepository } from './interfaces/DeleteAccountRepository';
+import { getClientsRepository } from './interfaces/getClientsRepository';
 
 @Global()
 @Module({
@@ -23,6 +26,10 @@ import { roleRepository } from './repositories/prisma/role-prisma.repository';
       provide: FindAccountByEmailRepository,
       useClass: AccountPrismaRepository,
     },
+    { provide: PatchAccountRepository, useClass: AccountPrismaRepository },
+    { provide: DeleteAccountByIdRepository, useClass: AccountPrismaRepository },
+    { provide: getClientsRepository, useClass: AccountPrismaRepository },
+
     productPrismaRepository,
     addressPrismaRepository,
     orderPrismaRepository,
@@ -32,9 +39,12 @@ import { roleRepository } from './repositories/prisma/role-prisma.repository';
     roleRepository,
   ],
   exports: [
+    DeleteAccountByIdRepository,
     CreateAccountRepository,
+    PatchAccountRepository,
     FindAccountByEmailRepository,
     productPrismaRepository,
+    getClientsRepository,
     orderPrismaRepository,
     addressPrismaRepository,
     companysPrismaRepository,

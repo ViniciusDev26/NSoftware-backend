@@ -3,10 +3,19 @@ import { CreateAccountRepository } from '../../interfaces/CreateAccountRepositor
 import { PrismaService } from 'src/database/services/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FindAccountByEmailRepository } from 'src/database/interfaces/FindAccountByEmailRepository';
+import { PatchAccountRepository } from 'src/database/interfaces/patchAccountRepository';
+import { DeleteAccountByIdRepository } from 'src/database/interfaces/DeleteAccountRepository';
+import { getClientsRepository } from 'src/database/interfaces/getClientsRepository';
+import { getAllClientsDTO } from 'src/account/dtos/getAllClients.dto';
 
 @Injectable()
 export class AccountPrismaRepository
-  implements CreateAccountRepository, FindAccountByEmailRepository
+  implements
+    CreateAccountRepository,
+    FindAccountByEmailRepository,
+    PatchAccountRepository,
+    DeleteAccountByIdRepository,
+    getClientsRepository
 {
   constructor(private readonly prismaService: PrismaService) {}
 
@@ -61,13 +70,65 @@ export class AccountPrismaRepository
   }
 
   async findByMail(email: string): Promise<Account> {
-    const accountData = await this.prismaService.account.findUnique({
+    try {
+      const accountData = await this.prismaService.account.findUnique({
+        where: {
+          email,
+        },
+      });
+      return new Account(accountData);
+    } catch {
+      throw new HttpException(
+        'Error - Não foi possível encontrar  usuário',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async pathUser(account: Account) {
+    const edition = await this.prismaService.account.update({
       where: {
-        email,
+        email: account.email,
+      },
+      data: {
+        roleId: account.roleId,
+        wage: account.wage,
       },
     });
+    return edition;
+  }
 
-    if (!accountData) return null;
-    return new Account(accountData);
+  async findById(email): Promise<any> {
+    try {
+      const deletionAccount = await this.prismaService.account.delete({
+        where: {
+          email: email.email,
+        },
+      });
+      return deletionAccount;
+    } catch {
+      throw new HttpException(
+        'Error - Não foi possível deletar usuário',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async findByEmpresaId(companyId: any): Promise<Account | void> {
+    try {
+      const clients = await this.prismaService.account.findMany({
+        where: {
+          companyId,
+        },
+      });
+      clients.map((client) => {
+        return new Account(client);
+      });
+    } catch {
+      throw new HttpException(
+        'Error - Clients não encontrados',
+        HttpStatus.ACCEPTED,
+      );
+    }
   }
 }

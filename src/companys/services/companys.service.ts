@@ -6,6 +6,11 @@ type companyProps = {
   codeEmployee: number;
   companyCode: string;
   companyName: string;
+  lat: string;
+  lng: string;
+  street: string;
+  houseNumber: number;
+  district: string;
 };
 
 @Injectable()

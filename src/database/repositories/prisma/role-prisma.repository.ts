@@ -10,4 +10,13 @@ export class roleRepository {
     });
     return save;
   }
+
+  async get({ companyId }) {
+    const getRoles = await this.prisma.role.findMany({
+      where: {
+        companyId,
+      },
+    });
+    return getRoles;
+  }
 }

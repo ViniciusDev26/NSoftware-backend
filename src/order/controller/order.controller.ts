@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
+import { GetOrdertDTO } from '../dtos/getOrder.dto';
 import { orderService } from '../service/order.service';
 
 @Controller('/order')
@@ -6,8 +7,9 @@ export class orderController {
   constructor(private readonly service: orderService) {}
 
   @Get('/')
-  async getOrder(@Body() query) {
-    const allOrder = await this.service.getOrders(query);
+  async getOrder(@Query() body: GetOrdertDTO) {
+    const allOrder = await this.service.getOrders(body);
+
     return allOrder;
   }
   @Post('/')

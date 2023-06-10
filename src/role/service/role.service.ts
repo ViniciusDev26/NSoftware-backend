@@ -20,4 +20,9 @@ export class roleService {
     const saveRole = await this.repository.save(param);
     return saveRole;
   }
+
+  async getRoles(param) {
+    const roles = await this.repository.get(param);
+    return roles;
+  }
 }

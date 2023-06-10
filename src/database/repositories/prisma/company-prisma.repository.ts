@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { StatusCodes } from 'http-status-codes';
 import { PrismaService } from 'src/database/services/prisma.service';
 type companyProps = {
   access: string;
   codeEmployee: number;
   companyCode: string;
   companyName: string;
+  lat: string;
+  lng: string;
+  street: string;
+  houseNumber: number;
+  district: string;
 };
 @Injectable()
 export class companysPrismaRepository {

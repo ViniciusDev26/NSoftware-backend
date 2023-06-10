@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Query } from '@nestjs/common';
+import { getEmployeeDTO } from '../dtos/getEmployee.dtos';
 import { employeeService } from '../service/employee.service';
 
 @Controller('/employee')
 export class employeeController {
   constructor(readonly service: employeeService) {}
+
   @Get('/')
-  async getEmployee(@Body() params) {
+  async getEmployee(@Query() params: getEmployeeDTO) {
     const employees = await this.service.getEmployee(params);
     return employees;
   }

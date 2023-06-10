@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { employeeRepository } from 'src/database/repositories/prisma/employee-prisma.repository';
+import { getEmployeeDTO } from '../dtos/getEmployee.dtos';
 
 type employeeProps = {
   companyId: number;
@@ -17,9 +18,9 @@ type employeeProps = {
 @Injectable()
 export class employeeService {
   constructor(readonly repository: employeeRepository) {}
-  async getEmployee(params: employeeProps) {
+
+  async getEmployee(params: getEmployeeDTO) {
     const get = await this.repository.getEmployee(params);
-    console.log(params);
     return get;
   }
 

@@ -10,7 +10,18 @@ export class orderPrismaRepository implements OrderRepository {
   constructor(readonly prisma: PrismaService) {}
 
   async registerOrder(params: orderProps) {
-    const { companyId, priority, size, userId, value, obs, lat, lng } = params;
+    const {
+      companyId,
+      priority,
+      size,
+      userId,
+      value,
+      obs,
+      lat,
+      lng,
+      image,
+      name,
+    } = params;
     try {
       const register = await this.prisma.order.create({
         data: {
@@ -24,6 +35,8 @@ export class orderPrismaRepository implements OrderRepository {
           obs,
           lat,
           lng,
+          image,
+          name,
         },
       });
       return register;
@@ -32,10 +45,11 @@ export class orderPrismaRepository implements OrderRepository {
     }
   }
 
-  async getOrders(params: orderProps) {
+  async getOrders(params: Partial<orderProps>) {
     const { page } = params;
-    const skip = 10 * (page - 1);
-    if (params.userId) {
+
+    const skip = (10 * (page - 1)) as number;
+    if (params.userId as any) {
       const orders = await this.prisma.order.findMany({
         skip,
         take: 10,

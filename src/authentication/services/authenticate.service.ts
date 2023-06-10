@@ -4,6 +4,7 @@ import { JwtPayloadModel } from '../models/jwt-payload.model';
 import { JwtService } from '@nestjs/jwt';
 import { HashComparer } from 'src/shared/cryptography/protocols/hash-comparer';
 import { authorizationRepository } from 'src/database/repositories/prisma/authentication-prisma.repository';
+import { getClientsRepository } from 'src/database/interfaces/getClientsRepository';
 
 interface AuthenticateServiceParams {
   email: string;
@@ -17,6 +18,7 @@ export class AuthenticateService {
     private readonly hashComparer: HashComparer,
     private readonly jwtService: JwtService,
     private readonly repository: authorizationRepository,
+    private readonly getClients: getClientsRepository,
   ) {}
 
   async execute(params: AuthenticateServiceParams) {

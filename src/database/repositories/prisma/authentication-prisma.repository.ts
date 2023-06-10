@@ -17,17 +17,24 @@ export class authorizationRepository {
           codeEmployee: getStatus.codeEmployee,
         },
       });
-
-      const getRoleUser = await this.prisma.account.findFirst({
-        where: {
-          id: getStatus.id,
-        },
-      });
+      if (getStatus.roleId) {
+        const getOrder = await this.prisma.role.findUnique({
+          where: {
+            id: getStatus.roleId,
+          },
+        });
+        return {
+          statusCompany: getStatusForCompany.access,
+          roleUser: getOrder.role,
+          codeEmployee: getStatus.codeEmployee,
+          companyID: getStatusForCompany.id,
+        };
+      }
       return {
         statusCompany: getStatusForCompany.access,
-        roleUser: getRoleUser.roleId,
-        codeEmployee: getRoleUser.codeEmployee,
-        companyID: getRoleUser.companyId,
+        roleUser: 'Sem função',
+        codeEmployee: getStatus.codeEmployee,
+        companyID: getStatusForCompany.id,
       };
     }
   }

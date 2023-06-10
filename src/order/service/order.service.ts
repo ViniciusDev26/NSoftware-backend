@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { orderPrismaRepository } from 'src/database/repositories/prisma/order-prisma.repository';
 
 type orderPros = {
   companyId: number;
-  userId: number;
+  userId: string;
   priority: boolean;
   status: string;
   date: Date;
@@ -14,16 +14,23 @@ type orderPros = {
   page: number;
   lat?: string;
   lng?: string;
+  name: string;
+  image: string;
+};
+
+type getOrderParam = {
+  companyId: number;
+  userId?: string;
+  page: number;
 };
 @Injectable()
 export class orderService {
   constructor(readonly register: orderPrismaRepository) {}
 
-  async getOrders(params: orderPros) {
+  async getOrders(params: getOrderParam) {
     const { userId, companyId, page } = params;
-    console.log(params);
     if ((!userId && !companyId) || !page) {
-      return { Erro: 'Invalid Params' };
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
     const allOrders = await this.register.getOrders(params);
     return allOrders;

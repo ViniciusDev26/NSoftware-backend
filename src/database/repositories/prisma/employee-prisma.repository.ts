@@ -17,13 +17,14 @@ type employeeProps = {
 @Injectable()
 export class employeeRepository {
   constructor(private readonly prismaService: PrismaService) {}
-  async getEmployee(params: employeeProps): Promise<any> {
+
+  async getEmployee({ codeEmployee }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const handleGetEmployee: any =
           await this.prismaService.account.findMany({
             where: {
-              codeEmployee: params.codeEmployee,
+              codeEmployee,
             },
           });
 
@@ -41,6 +42,7 @@ export class employeeRepository {
                 roleEmployee: role,
                 wage: element.wage,
                 email: element.email,
+                codeEmployee: element.codeEmployee,
               };
             }
             return {
@@ -49,6 +51,7 @@ export class employeeRepository {
               roleEmployee: element.roleId,
               wage: element.wage,
               email: element.email,
+              codeEmployee: element.codeEmployee,
             };
           }),
         );
