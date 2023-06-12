@@ -66,6 +66,7 @@ export class AccountPrismaRepository
         data: {
           roleId: account.roleId,
           wage: account.wage,
+          addressId: account.addressId,
         },
       });
       return edition;

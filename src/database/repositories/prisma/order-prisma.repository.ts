@@ -44,6 +44,18 @@ export class orderPrismaRepository implements OrderRepository {
         where: {
           userId: params.userId,
         },
+        include: {
+          account: {
+            select: {
+              address: true,
+            },
+          },
+          Sizes: {
+            select: {
+              size: true,
+            },
+          },
+        },
       });
       return orders;
     }
