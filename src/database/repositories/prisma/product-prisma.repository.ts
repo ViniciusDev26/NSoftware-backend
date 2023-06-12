@@ -14,14 +14,17 @@ type datasForRegister = {
 export class productPrismaRepository {
   constructor(private readonly Prisma: PrismaService) {}
 
-  async getProducts(companyId: number, page: number) {
-    const skip = 10 * (page - 1);
+  async getProducts(body: any) {
+    const skip = 10 * (body.page - 1);
     try {
       const allProducts = await this.Prisma.products.findMany({
         skip,
         take: 10,
         where: {
-          companyId,
+          companyId: body.companyID,
+        },
+        include: {
+          Sizes: true,
         },
       });
       return allProducts;
@@ -31,8 +34,6 @@ export class productPrismaRepository {
   }
 
   async registerProduct(params: datasForRegister) {
-    console.log(params);
-
     try {
       const saveProduct = await this.Prisma.products.create({
         data: {
@@ -45,8 +46,7 @@ export class productPrismaRepository {
         },
       });
       return saveProduct;
-    } catch (error) {
-      console.log(error);
+    } catch {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
   }

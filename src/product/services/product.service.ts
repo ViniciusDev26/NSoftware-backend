@@ -13,14 +13,12 @@ type datasForRegister = {
 @Injectable()
 export class productService {
   constructor(readonly product: productPrismaRepository) {}
-  async execute(companyId: number, page: number) {
-    const allProducts = await this.product.getProducts(companyId, page);
+  async execute(body: any) {
+    const allProducts = await this.product.getProducts(body);
     return allProducts;
   }
 
   async saveProduct(params: datasForRegister) {
-    console.log(params);
-
     const { companyId, value, sizeId } = params;
     if (!companyId || !value || !sizeId) {
       return { error: 'Invalid params' };

@@ -6,12 +6,18 @@ export class productController {
   constructor(private readonly ProductService: productService) {}
 
   @Get('/')
-  async getProduct(@Query() query): Promise<any> {
-    const { companyID, page } = query;
-    if (!companyID || !page) {
+  async getProduct(
+    @Query('companyId') companyId: number,
+    @Query('page') page: number,
+  ) {
+    const body = {
+      companyId,
+      page,
+    };
+    if (!body.companyId || !body.page) {
       return { Error: 'Invalid params' };
     }
-    const service = await this.ProductService.execute(companyID, page);
+    const service = await this.ProductService.execute(body);
     return service;
   }
 

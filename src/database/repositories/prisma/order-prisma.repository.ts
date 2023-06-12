@@ -11,8 +11,6 @@ export class orderPrismaRepository implements OrderRepository {
   constructor(readonly prisma: PrismaService) {}
 
   async registerOrder(params: Partial<GetOrdertDTO>) {
-    console.log(params);
-
     try {
       const register = await this.prisma.order.create({
         data: {
@@ -27,8 +25,7 @@ export class orderPrismaRepository implements OrderRepository {
         },
       });
       return register;
-    } catch (error) {
-      console.log(error);
+    } catch {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
   }
