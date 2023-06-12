@@ -11,35 +11,44 @@ datasource db {
 }
 
 model Account {
-  id           String  @default(uuid())
-  companyId    Int?
-  AddressId    Int?
+  id           String    @unique @default(uuid())
   name         String
-  email        String  @unique
+  email        String    @unique
   password     String
+  companyId    Int?
+  addressId    Int?
+  orderId      Int?
   roleId       Int?
   wage         Int?
   obs          String?
   codeEmployee Int?
+  Company      Companys? @relation(fields: [companyId], references: [id])
+  address      Address?  @relation(fields: [addressId], references: [id])
+  role         Role?     @relation(fields: [roleId], references: [id])
+  Order        Order[]
 
   @@map("accounts")
 }
 
 model Address {
-  id          Int     @unique @default(autoincrement())
-  idAccount   Int
+  id          Int       @unique @default(autoincrement())
   lat         String
   lng         String
+  AccountId   String
   street      String
   houseNumber Int
   district    String
   obs         String?
+  orderId     Int?
+  Account     Account[]
+
+  @@map("addresses")
 }
 
 model Companys {
-  id           Int    @unique @default(autoincrement())
-  companyCode  String @unique
-  codeEmployee Int    @unique
+  id           Int       @unique @default(autoincrement())
+  companyCode  String    @unique
+  codeEmployee Int       @unique
   companyName  String
   access       String
   lat          String
@@ -47,6 +56,10 @@ model Companys {
   street       String
   houseNumber  Int
   district     String
+  Account      Account[]
+  Role         Role[] // Alterado de Roles para Role
+
+  @@map("companies")
 }
 
 model Products {
@@ -55,33 +68,56 @@ model Products {
   name            String
   value           Int
   image           String
-  sizesId         Int
+  sizeId          Int?
   recipeId        Int?
-  RelationRequest RelationRequest[]
+  relationRequest RelationRequest[]
+  Sizes           Sizes[]
+  Order           Order[]
+  orderId         Int?
+
+  @@map("products")
 }
 
 model Sizes {
-  id        Int    @unique @default(autoincrement())
+  id        Int      @unique @default(autoincrement())
   size      String
   productId Int
+  Product   Products @relation(fields: [productId], references: [id])
+  Order     Order[]
+  orderId   Int?
+
+  @@map("sizes")
 }
 
 model Order {
   id        Int      @unique @default(autoincrement())
-  name      String   @default("Sem nome")
-  image     String   @default("https://images.tcdn.com.br/img/img_prod/734896/telefone_ramal_sem_fio_ts_5121_preto_2577_1_546d22ba08fae4a55e7ad243dfdc8b90.jpeg")
   companyId Int
   priority  Boolean
-  userId    String
   status    String
   date      DateTime
   obs       String?
-  value     Int
-  size      String
-  lat       String?
-  lng       String?
+  userId    String
 
-  RelationRequest RelationRequest[]
+  sizeId    Int?
+  productId Int?
+
+  account         Account           @relation(fields: [userId], references: [id])
+  Products        Products?         @relation(fields: [productId], references: [id])
+  Sizes           Sizes?            @relation(fields: [sizeId], references: [id])
+  relationRequest RelationRequest[]
+
+  @@map("orders")
+}
+
+model Role {
+  id        Int       @unique @default(autoincrement())
+  companyId Int
+  role      String
+  userId    String
+  Account   Account[]
+  Companys  Companys? @relation(fields: [companyId], references: [id])
+
+  @@map("roles")
 }
 
 model RelationRequest {
@@ -92,6 +128,8 @@ model RelationRequest {
 
   order   Order    @relation(fields: [orderId], references: [id])
   product Products @relation(fields: [productId], references: [id])
+
+  @@map("relation_requests")
 }
 
 model Stock {
@@ -101,10 +139,6 @@ model Stock {
   unidade   String
   unitPrice Int
   quantity  Int
-}
 
-model role {
-  id        Int    @unique @default(autoincrement())
-  companyId Int
-  role      String
+  @@map("stocks")
 }

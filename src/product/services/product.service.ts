@@ -6,9 +6,8 @@ type datasForRegister = {
   image: string;
   name: string;
   recipeId: number;
-  sizesId: number[];
   value: number;
-  sizes: number;
+  sizeId: number;
 };
 
 @Injectable()
@@ -20,8 +19,10 @@ export class productService {
   }
 
   async saveProduct(params: datasForRegister) {
-    const { companyId, value, sizesId } = params;
-    if (!companyId || !value || !sizesId) {
+    console.log(params);
+
+    const { companyId, value, sizeId } = params;
+    if (!companyId || !value || !sizeId) {
       return { error: 'Invalid params' };
     }
     const registerProducts = await this.product.registerProduct(params);

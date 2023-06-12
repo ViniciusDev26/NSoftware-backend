@@ -7,7 +7,17 @@ export class orderController {
   constructor(private readonly service: orderService) {}
 
   @Get('/')
-  async getOrder(@Query() body: GetOrdertDTO) {
+  async getOrder(
+    @Query('companyId') companyId: number,
+    @Query('userId') userId: string,
+    @Query('page') page: number,
+  ) {
+    const body: Partial<GetOrdertDTO> = {
+      companyId,
+      userId,
+      page,
+    };
+
     const allOrder = await this.service.getOrders(body);
 
     return allOrder;

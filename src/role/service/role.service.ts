@@ -12,7 +12,7 @@ export class roleService {
   async save(param: roleProps) {
     if (!param.companyId) {
       throw new HttpException(
-        'Error - Não foi possível buscar cargos',
+        'Error - Não foi possível salvar cargo',
         HttpStatus.FAILED_DEPENDENCY,
       );
     }

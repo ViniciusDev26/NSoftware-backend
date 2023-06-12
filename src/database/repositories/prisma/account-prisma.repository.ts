@@ -18,53 +18,25 @@ export class AccountPrismaRepository
 {
   constructor(private readonly prismaService: PrismaService) {}
 
-  private domainToPrismaData(account: Account) {
-    return {
-      id: account.id,
-      name: account.name,
-      email: account.email,
-      password: account.password,
-      codeEmployee: account.codeEmployee,
-      AddressId: account.AddressId,
-      roleId: account.roleId,
-      wage: account.wage,
-      obs: account.obs,
-      companyId: account.companyId,
-    };
-  }
-
-  async save(account: Account): Promise<void> {
-    const data = this.domainToPrismaData(account);
-    const { codeEmployee } = account;
-    if (codeEmployee) {
-      try {
-        const verifyCodeEmployee = await this.prismaService.companys.findFirst({
-          where: {
-            codeEmployee,
-          },
-        });
-        if (verifyCodeEmployee) {
-          await this.prismaService.account.create({
-            data,
-          });
-          throw new HttpException('Success', HttpStatus.ACCEPTED);
-        }
-      } catch {
-        throw new HttpException(
-          'Error - Código não reconhecido',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
+  async save(data: any): Promise<void> {
+    const emailExiste = await this.prismaService.account.findFirst({
+      where: {
+        email: data.email,
+      },
+    });
+    if (emailExiste) {
+      throw new HttpException('Erro - Email já em uso', HttpStatus.BAD_REQUEST);
     }
+
     try {
       await this.prismaService.account.create({
         data,
       });
       throw new HttpException('Success - Usuário salvo', HttpStatus.ACCEPTED);
-    } catch {
+    } catch (error) {
       throw new HttpException(
-        'Error - Erro ao salvar usuário',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        'Erro - Por favor, verifique os dados enviados',
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
@@ -86,16 +58,23 @@ export class AccountPrismaRepository
   }
 
   async pathUser(account: Account) {
-    const edition = await this.prismaService.account.update({
-      where: {
-        email: account.email,
-      },
-      data: {
-        roleId: account.roleId,
-        wage: account.wage,
-      },
-    });
-    return edition;
+    try {
+      const edition = await this.prismaService.account.update({
+        where: {
+          email: account.email,
+        },
+        data: {
+          roleId: account.roleId,
+          wage: account.wage,
+        },
+      });
+      return edition;
+    } catch {
+      throw new HttpException(
+        'Error - Não foi possível alterar usuário',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async findById(email): Promise<any> {

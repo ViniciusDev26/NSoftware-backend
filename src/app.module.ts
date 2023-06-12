@@ -9,6 +9,7 @@ import { addressModule } from './address/address.module';
 import { companyModule } from './companys/companys.module';
 import { employeeModule } from './employee/employee-module';
 import { roleModule } from './role/role.module';
+import { moduleSize } from './size/size.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { roleModule } from './role/role.module';
     companyModule,
     employeeModule,
     roleModule,
+    moduleSize,
   ],
   controllers: [],
   providers: [],

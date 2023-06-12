@@ -1,44 +1,23 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { orderPrismaRepository } from 'src/database/repositories/prisma/order-prisma.repository';
+import { GetOrdertDTO } from '../dtos/getOrder.dto';
 
-type orderPros = {
-  companyId: number;
-  userId: string;
-  priority: boolean;
-  status: string;
-  date: Date;
-  obs: string;
-  value: number;
-  size: string;
-  id: number;
-  page: number;
-  lat?: string;
-  lng?: string;
-  name: string;
-  image: string;
-};
-
-type getOrderParam = {
-  companyId: number;
-  userId?: string;
-  page: number;
-};
 @Injectable()
 export class orderService {
   constructor(readonly register: orderPrismaRepository) {}
 
-  async getOrders(params: getOrderParam) {
-    const { userId, companyId, page } = params;
-    if ((!userId && !companyId) || !page) {
+  async getOrders(params: Partial<GetOrdertDTO>) {
+    const { userId, companyId } = params;
+    if (!userId && !companyId) {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
     const allOrders = await this.register.getOrders(params);
     return allOrders;
   }
 
-  async makeOrder(params: orderPros) {
-    const { companyId, userId, size, value } = params;
-    if (!companyId || !userId || !size || !value) {
+  async makeOrder(params: Partial<GetOrdertDTO>) {
+    const { companyId, userId, sizeId } = params;
+    if (!companyId || !userId || !sizeId) {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
     if (!params.priority) {
@@ -48,12 +27,17 @@ export class orderService {
     return registed;
   }
 
-  async changeOrder(params: orderPros) {
+  async changeOrder(params: Partial<GetOrdertDTO>) {
     const { companyId, id, status } = params;
     const filterStatus = ['Preparando', 'Concluído', 'A caminho', 'Entregue'];
-    const conditionFIlter = filterStatus.find(
-      (statusFilter) => statusFilter === status,
-    );
+    if (status) {
+      const conditionFIlter = filterStatus.find(
+        (statusFilter) => statusFilter === status,
+      );
+      if (!conditionFIlter) {
+        throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
+      }
+    }
     if (!companyId || !id) {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }

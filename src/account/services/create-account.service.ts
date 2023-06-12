@@ -9,15 +9,17 @@ import { getClientsRepository } from 'src/database/interfaces/getClientsReposito
 import { getAllClientsDTO } from '../dtos/getAllClients.dto';
 
 interface CreateAccountServiceParams {
+  id?: string;
   name: string;
   email: string;
   password: string;
   companyId: number;
-  AddressId?: number;
+  addressId?: number;
   roleId?: number;
   wage?: number;
   obs?: string;
   codeEmployee?: number;
+  orderId?: number;
 }
 
 @Injectable()
@@ -35,17 +37,13 @@ export class CreateAccountService {
     await this.findAccountByMail.findByMail(params.email);
 
     const hashPassword = await this.crypter.encrypt(params.password);
-    const account = new Account({
+    const account = {
       name: params.name,
       email: params.email,
       password: hashPassword,
       companyId: params.companyId,
-      AddressId: params.AddressId,
       codeEmployee: params.codeEmployee,
-      wage: params.wage,
-      obs: params.obs,
-      roleId: params.roleId,
-    });
+    };
 
     await this.createAccountRepository.save(account);
   }

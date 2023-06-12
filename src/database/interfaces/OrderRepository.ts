@@ -11,10 +11,11 @@ export type orderProps = {
   name: string;
   image: string;
   value: number;
-  size: string;
+  sizeId: number;
   page: number;
   lng?: string;
   lat?: string;
+  productsId?: number;
 };
 
 export interface OrderRepository {

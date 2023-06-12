@@ -13,6 +13,7 @@ import { roleRepository } from './repositories/prisma/role-prisma.repository';
 import { PatchAccountRepository } from './interfaces/patchAccountRepository';
 import { DeleteAccountByIdRepository } from './interfaces/DeleteAccountRepository';
 import { getClientsRepository } from './interfaces/getClientsRepository';
+import { sizeRepository } from './repositories/prisma/size-prisma.repository';
 
 @Global()
 @Module({
@@ -30,6 +31,7 @@ import { getClientsRepository } from './interfaces/getClientsRepository';
     { provide: DeleteAccountByIdRepository, useClass: AccountPrismaRepository },
     { provide: getClientsRepository, useClass: AccountPrismaRepository },
 
+    sizeRepository,
     productPrismaRepository,
     addressPrismaRepository,
     orderPrismaRepository,
@@ -46,6 +48,7 @@ import { getClientsRepository } from './interfaces/getClientsRepository';
     productPrismaRepository,
     getClientsRepository,
     orderPrismaRepository,
+    sizeRepository,
     addressPrismaRepository,
     companysPrismaRepository,
     authorizationRepository,

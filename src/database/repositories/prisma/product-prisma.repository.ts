@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/services/prisma.service';
 
 type datasForRegister = {
@@ -6,9 +6,8 @@ type datasForRegister = {
   image: string;
   name: string;
   recipeId: number;
-  sizes: number;
+  sizeId: number;
   value: number;
-  sizesId: number[];
 };
 
 @Injectable()
@@ -17,27 +16,38 @@ export class productPrismaRepository {
 
   async getProducts(companyId: number, page: number) {
     const skip = 10 * (page - 1);
-    const allProducts = await this.Prisma.products.findMany({
-      skip,
-      take: 10,
-      where: {
-        companyId,
-      },
-    });
-    return allProducts;
+    try {
+      const allProducts = await this.Prisma.products.findMany({
+        skip,
+        take: 10,
+        where: {
+          companyId,
+        },
+      });
+      return allProducts;
+    } catch {
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
+    }
   }
 
   async registerProduct(params: datasForRegister) {
-    const saveProduct = await this.Prisma.products.create({
-      data: {
-        companyId: params.companyId,
-        image: params.image,
-        name: params.name,
-        sizesId: params.sizes,
-        value: params.value,
-        recipeId: params.recipeId,
-      },
-    });
-    return saveProduct;
+    console.log(params);
+
+    try {
+      const saveProduct = await this.Prisma.products.create({
+        data: {
+          companyId: params.companyId,
+          sizeId: params.sizeId,
+          image: params.image,
+          name: params.name,
+          value: params.value,
+          recipeId: params.recipeId,
+        },
+      });
+      return saveProduct;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
+    }
   }
 }

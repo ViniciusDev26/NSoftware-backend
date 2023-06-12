@@ -1,38 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/services/prisma.service';
 
 @Injectable()
 export class authorizationRepository {
   constructor(readonly prisma: PrismaService) {}
   async getStausByCompany(email) {
-    const getStatus = await this.prisma.account.findUnique({
-      where: {
-        email,
-      },
-    });
-    const { access, id } = await this.prisma.companys.findUnique({
-      where: {
-        id: getStatus.companyId,
-      },
-    });
-
-    if (getStatus.roleId) {
-      const role = await this.prisma.role.findUnique({
+    try {
+      const getStatus = await this.prisma.account.findUnique({
         where: {
-          id: getStatus.roleId,
+          email,
+        },
+        select: {
+          id: true,
+          name: true,
+          companyId: true,
+          Company: {
+            select: {
+              id: true,
+              access: true,
+              district: true,
+              lat: true,
+              lng: true,
+              houseNumber: true,
+              street: true,
+            },
+          },
+          role: {
+            select: {
+              role: true,
+            },
+          },
         },
       });
-      return {
-        statusCompany: access,
-        companyID: id,
-        roleUser: role.role,
-      };
-    }
 
-    return {
-      statusCompany: access,
-      companyID: id,
-      roleUser: 'Sem função',
-    };
+      return getStatus;
+    } catch {
+      throw new HttpException('Error ', HttpStatus.BAD_REQUEST);
+    }
   }
 }
