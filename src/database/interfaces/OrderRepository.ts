@@ -16,6 +16,7 @@ export type orderProps = {
   lng?: string;
   lat?: string;
   productsId?: number;
+  contact?: string;
 };
 
 export interface OrderRepository {

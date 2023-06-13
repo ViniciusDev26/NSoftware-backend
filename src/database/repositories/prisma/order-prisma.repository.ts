@@ -44,6 +44,8 @@ export class orderPrismaRepository implements OrderRepository {
         include: {
           account: {
             select: {
+              name: true,
+              contact: true,
               address: true,
             },
           },
@@ -68,7 +70,7 @@ export class orderPrismaRepository implements OrderRepository {
           account: {
             select: {
               name: true,
-
+              contact: true,
               address: true,
             },
           },
