@@ -15,6 +15,7 @@ model Account {
   name         String
   email        String    @unique
   password     String
+  contact      String    @default("")
   companyId    Int?
   addressId    Int?
   orderId      Int?

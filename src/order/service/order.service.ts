@@ -30,6 +30,7 @@ export class orderService {
   async changeOrder(params: Partial<GetOrdertDTO>) {
     const { companyId, id, status } = params;
     const filterStatus = ['Preparando', 'Concluído', 'A caminho', 'Entregue'];
+    console.log(params);
     if (status) {
       const conditionFIlter = filterStatus.find(
         (statusFilter) => statusFilter === status,
@@ -39,10 +40,19 @@ export class orderService {
       }
     }
     if (!companyId || !id) {
-      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
+      throw new HttpException('Erroeer', HttpStatus.BAD_GATEWAY);
     }
 
     const service = await this.register.changeOnder(params);
     return service;
+  }
+
+  async deleteOrder(id) {
+    if (!id) {
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
+    }
+
+    const deletion = await this.register.deletionOrder(id);
+    return deletion;
   }
 }

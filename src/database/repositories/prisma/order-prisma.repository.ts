@@ -8,7 +8,7 @@ import { GetOrdertDTO } from 'src/order/dtos/getOrder.dto';
 
 @Injectable()
 export class orderPrismaRepository implements OrderRepository {
-  constructor(readonly prisma: PrismaService) {}
+  constructor(readonly prisma: PrismaService) { }
 
   async registerOrder(params: Partial<GetOrdertDTO>) {
     try {
@@ -47,11 +47,12 @@ export class orderPrismaRepository implements OrderRepository {
               address: true,
             },
           },
-          Sizes: {
-            select: {
-              size: true,
+          Products: {
+            include: {
+              Sizes: true,
             },
           },
+          Sizes: true,
         },
       });
       return orders;
@@ -64,7 +65,19 @@ export class orderPrismaRepository implements OrderRepository {
           companyId: params.companyId,
         },
         include: {
-          Products: true,
+          account: {
+            select: {
+              name: true,
+
+              address: true,
+            },
+          },
+          Products: {
+            include: {
+              Sizes: true,
+            },
+          },
+          Sizes: true,
         },
       });
       return orders;
@@ -82,6 +95,19 @@ export class orderPrismaRepository implements OrderRepository {
         data: params,
       });
       return change;
+    } catch {
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
+    }
+  }
+
+  async deletionOrder({ id }) {
+    try {
+      const deletion = await this.prisma.order.delete({
+        where: {
+          id,
+        },
+      });
+      return deletion;
     } catch {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }

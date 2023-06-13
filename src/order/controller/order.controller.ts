@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { GetOrdertDTO } from '../dtos/getOrder.dto';
 import { orderService } from '../service/order.service';
 
@@ -33,5 +41,12 @@ export class orderController {
   async pathOrder(@Body() query) {
     const changeOrder = await this.service.changeOrder(query);
     return changeOrder;
+  }
+
+  @Delete('/')
+  async deleteOrder(@Query('id') id: number) {
+    const identificador: Partial<GetOrdertDTO> = { id };
+    const deleteOrder = await this.service.deleteOrder(identificador);
+    return deleteOrder;
   }
 }
