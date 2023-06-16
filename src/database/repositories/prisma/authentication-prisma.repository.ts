@@ -14,6 +14,7 @@ export class authorizationRepository {
           id: true,
           name: true,
           companyId: true,
+          email: true,
           Company: {
             select: {
               id: true,
@@ -30,6 +31,7 @@ export class authorizationRepository {
               role: true,
             },
           },
+          address: true,
         },
       });
 
