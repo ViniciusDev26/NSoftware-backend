@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/services/prisma.service';
+import { companiesDTO } from 'src/product/dtos/companies.dto';
 
 type datasForRegister = {
   companyId: number;
@@ -46,6 +47,24 @@ export class productPrismaRepository {
         },
       });
       return saveProduct;
+    } catch {
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
+    }
+  }
+
+  async getWithId(query: Partial<companiesDTO>) {
+    const { idProduct } = query;
+
+    try {
+      const getItem = await this.Prisma.products.findUnique({
+        where: {
+          id: idProduct,
+        },
+        include: {
+          Sizes: true,
+        },
+      });
+      return getItem;
     } catch {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }

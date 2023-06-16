@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { companiesDTO } from '../dtos/companies.dto';
 import { productService } from '../services/product.service';
 
 @Controller('/product')
@@ -15,10 +24,27 @@ export class productController {
       page,
     };
     if (!body.companyId || !body.page) {
-      return { Error: 'Invalid params' };
+      throw new HttpException(
+        'Erro - parametros inválidos',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     const service = await this.ProductService.execute(body);
     return service;
+  }
+
+  @Get('/id')
+  async getProductForId(@Query('idProduct') idProduct: number) {
+    const query: Partial<companiesDTO> = { idProduct };
+
+    if (!query.idProduct) {
+      throw new HttpException(
+        'Erro - parametros inválidos',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const getProduct = await this.ProductService.getWithId(query);
+    return getProduct;
   }
 
   @Post('/')

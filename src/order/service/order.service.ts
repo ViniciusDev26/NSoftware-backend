@@ -40,7 +40,7 @@ export class orderService {
       }
     }
     if (!companyId || !id) {
-      throw new HttpException('Erroeer', HttpStatus.BAD_GATEWAY);
+      throw new HttpException('Errosr', HttpStatus.BAD_GATEWAY);
     }
 
     const service = await this.register.changeOnder(params);

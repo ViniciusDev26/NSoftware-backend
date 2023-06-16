@@ -24,6 +24,7 @@ export abstract class CreateAccountDTO {
 
   @Type(() => Number)
   @IsNumber()
+  @IsOptional()
   @ApiProperty()
   codeEmployee: number;
 }

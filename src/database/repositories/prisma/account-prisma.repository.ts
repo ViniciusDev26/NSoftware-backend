@@ -27,13 +27,13 @@ export class AccountPrismaRepository
     if (emailExiste) {
       throw new HttpException('Erro - Email já em uso', HttpStatus.BAD_REQUEST);
     }
+    const saving = await this.prismaService.account.create({
+      data,
+    });
 
-    try {
-      await this.prismaService.account.create({
-        data,
-      });
+    if (saving) {
       throw new HttpException('Success - Usuário salvo', HttpStatus.ACCEPTED);
-    } catch (error) {
+    } else {
       throw new HttpException(
         'Erro - Por favor, verifique os dados enviados',
         HttpStatus.BAD_REQUEST,

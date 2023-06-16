@@ -6,6 +6,11 @@ export abstract class companiesDTO {
   @IsNumber()
   @ApiProperty()
   @Type(() => Number)
+  idProduct: number;
+
+  @IsNumber()
+  @ApiProperty()
+  @Type(() => Number)
   companyId: number;
 
   @IsString()
