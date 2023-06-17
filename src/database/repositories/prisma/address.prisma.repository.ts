@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { AddressDTO } from 'src/address/dtos/adress.dto';
 import { PrismaService } from 'src/database/services/prisma.service';
 type addressProops = {
   id: number;
@@ -13,15 +14,45 @@ type addressProops = {
 
 @Injectable()
 export class addressPrismaRepository {
-  constructor(private readonly Prisma: PrismaService) {}
+  constructor(private readonly Prisma: PrismaService) { }
 
-  async save(data: any) {
+  async save(data: Partial<AddressDTO>) {
+    const verifyAccount = await this.Prisma.address.findFirst({
+      where: {
+        AccountId: data.AccountId,
+      },
+    });
+    if (verifyAccount) {
+      throw new HttpException(
+        'Endereço já sincronzado ',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    console.log(verifyAccount);
+
     try {
       const saveInBd = await this.Prisma.address.create({
-        data,
+        data: {
+          AccountId: data.AccountId,
+          district: data.district,
+          houseNumber: data.houseNumber,
+          lat: data.lat,
+          lng: data.lng,
+          street: data.street,
+        },
+      });
+      console.log(saveInBd);
+      await this.Prisma.account.update({
+        where: {
+          id: data.AccountId,
+        },
+        data: {
+          addressId: saveInBd.id,
+        },
       });
       return saveInBd;
-    } catch {
+    } catch (error) {
+      console.log(error);
       throw new HttpException('Error ', HttpStatus.BAD_REQUEST);
     }
   }

@@ -8,7 +8,7 @@ import { GetOrdertDTO } from 'src/order/dtos/getOrder.dto';
 
 @Injectable()
 export class orderPrismaRepository implements OrderRepository {
-  constructor(readonly prisma: PrismaService) { }
+  constructor(readonly prisma: PrismaService) {}
 
   async registerOrder(params: Partial<GetOrdertDTO>) {
     try {

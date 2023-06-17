@@ -25,7 +25,6 @@ export class orderController {
       userId,
       page,
     };
-
     const allOrder = await this.service.getOrders(body);
 
     return allOrder;

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { addressPrismaRepository } from 'src/database/repositories/prisma/address.prisma.repository';
+import { AddressDTO } from '../dtos/adress.dto';
 
 type addressProops = {
   id: number;
@@ -16,11 +17,12 @@ type addressProops = {
 export class AddressService {
   constructor(readonly address: addressPrismaRepository) {}
 
-  async register(params: addressProops) {
+  async register(params: Partial<AddressDTO>) {
     const { AccountId } = params;
     if (!AccountId) {
       return { Error: 'Invalid params' };
     }
+
     const saveAddress = this.address.save(params);
     return saveAddress;
   }

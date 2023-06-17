@@ -10,6 +10,7 @@ import { companyModule } from './companys/companys.module';
 import { employeeModule } from './employee/employee-module';
 import { roleModule } from './role/role.module';
 import { moduleSize } from './size/size.module';
+import { stripe } from './Stripe/stripe.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { moduleSize } from './size/size.module';
     employeeModule,
     roleModule,
     moduleSize,
+    stripe,
   ],
   controllers: [],
   providers: [],
