@@ -14,6 +14,7 @@ import { PatchAccountRepository } from './interfaces/patchAccountRepository';
 import { DeleteAccountByIdRepository } from './interfaces/DeleteAccountRepository';
 import { getClientsRepository } from './interfaces/getClientsRepository';
 import { sizeRepository } from './repositories/prisma/size-prisma.repository';
+import { FavoritePrismaRepository } from './repositories/prisma/favorite-prisma.repository';
 
 @Global()
 @Module({
@@ -39,6 +40,7 @@ import { sizeRepository } from './repositories/prisma/size-prisma.repository';
     authorizationRepository,
     employeeRepository,
     roleRepository,
+    FavoritePrismaRepository,
   ],
   exports: [
     DeleteAccountByIdRepository,
@@ -54,6 +56,7 @@ import { sizeRepository } from './repositories/prisma/size-prisma.repository';
     authorizationRepository,
     employeeRepository,
     roleRepository,
+    FavoritePrismaRepository,
   ],
 })
 export class DatabaseModule {}

@@ -11,22 +11,24 @@ datasource db {
 }
 
 model Account {
-  id           String    @unique @default(uuid())
-  name         String
-  email        String    @unique
-  password     String
-  contact      String    @default("")
-  companyId    Int?
-  addressId    Int?
-  orderId      Int?
-  roleId       Int?
-  wage         Int?
-  obs          String?
+  id        String  @unique @default(uuid())
+  name      String
+  email     String  @unique
+  password  String
+  contact   String  @default("")
+  companyId Int?
+  addressId Int?
+  orderId   Int?
+  roleId    Int?
+  wage      Int?
+  obs       String?
+
   codeEmployee Int?
-  Company      Companys? @relation(fields: [companyId], references: [id])
-  address      Address?  @relation(fields: [addressId], references: [id])
-  role         Role?     @relation(fields: [roleId], references: [id])
+  Company      Companys?   @relation(fields: [companyId], references: [id])
+  address      Address?    @relation(fields: [addressId], references: [id])
+  role         Role?       @relation(fields: [roleId], references: [id])
   Order        Order[]
+  Favorites    Favorites[]
 
   @@map("accounts")
 }
@@ -75,6 +77,8 @@ model Products {
   Sizes           Sizes[]
   Order           Order[]
   orderId         Int?
+  Category        Category[]
+  Favorites       Favorites[]
 
   @@map("products")
 }
@@ -88,6 +92,27 @@ model Sizes {
   orderId   Int?
 
   @@map("sizes")
+}
+
+model Category {
+  id         Int       @unique @default(autoincrement())
+  category   String
+  Products   Products? @relation(fields: [productsId], references: [id])
+  productsId Int?
+
+  @@map("categories")
+}
+
+model Favorites {
+  id        Int      @unique @default(autoincrement())
+  productId Int
+  accountId String
+  createdAt DateTime @default(now())
+
+  product Products @relation(fields: [productId], references: [id])
+  account Account  @relation(fields: [accountId], references: [id])
+
+  @@map("favorites")
 }
 
 model Order {

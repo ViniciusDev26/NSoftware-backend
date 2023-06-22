@@ -11,6 +11,7 @@ import { employeeModule } from './employee/employee-module';
 import { roleModule } from './role/role.module';
 import { moduleSize } from './size/size.module';
 import { stripe } from './Stripe/stripe.module';
+import { favoriteModule } from './Favorite/favorite.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { stripe } from './Stripe/stripe.module';
     roleModule,
     moduleSize,
     stripe,
+    favoriteModule,
   ],
   controllers: [],
   providers: [],
