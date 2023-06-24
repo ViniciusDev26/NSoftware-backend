@@ -18,15 +18,11 @@ export abstract class CreateProductDTO {
   value: number;
 
   @IsString()
-  @ApiProperty()
-  @Type(() => String)
-  image: string;
-
-  @IsString()
   @IsNotEmpty()
   sizeName: string;
 
   @IsNumber()
   @IsNotEmpty()
+  @Type(() => Number)
   companyId: number;
 }

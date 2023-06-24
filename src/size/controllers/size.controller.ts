@@ -16,23 +16,23 @@ export class sizeController {
 
   @Post('/')
   async createSize(
-    @Body('productId') productId: number,
-    @Body('orderId') orderId: number,
-    @Body('size') size: string,
+    @Body('companyId') companyId: number,
+    @Body('id') id: number,
+    @Body('name') name: string,
   ) {
     const body: Partial<createSizeDTO> = {
-      productId,
-      orderId,
-      size,
+      companyId,
+      id,
+      name,
     };
     const save = await this.service.save(body);
     return save;
   }
 
   @Get('/')
-  async getSizes(@Query('productId') productId: number) {
-    const idProduct: Partial<createSizeDTO> = { productId };
-    const get = await this.service.getsizes(idProduct);
+  async getSizes(@Query('companyId') companyId: number) {
+    console.log(companyId);
+    const get = await this.service.getsizes(companyId);
     return get;
   }
 
@@ -46,15 +46,13 @@ export class sizeController {
   @Patch('/')
   async patchSize(
     @Query('id') id: number,
-    @Body('size') size: string,
-    @Body('orderId') orderId: number,
-    @Body('productId') productId: number,
+    @Body('name') name: string,
+    @Body('companyId') companyId: number,
   ) {
     const body: createSizeDTO = {
       id,
-      productId,
-      orderId,
-      size,
+      name,
+      companyId,
     };
     const patchSize = await this.service.patchSize(body);
     return patchSize;

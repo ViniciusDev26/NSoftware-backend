@@ -8,7 +8,7 @@ interface GetSizesOrCreate {
 }
 
 @Injectable()
-export class sizeRepository {
+export class SizeRepository {
   constructor(readonly prisma: PrismaService) {}
 
   async save(params: any) {
@@ -22,18 +22,18 @@ export class sizeRepository {
     }
   }
 
-  // async getAllProducts({ idProduct }) {
-  //   try {
-  //     const allProducts = await this.prisma.sizes.findMany({
-  //       where: {
-  //         productId: idProduct,
-  //       },
-  //     });
-  //     return allProducts;
-  //   } catch {
-  //     throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
-  //   }
-  // }
+  async getAllProducts(companyId: number) {
+    try {
+      const allProducts = await this.prisma.sizes.findMany({
+        where: {
+          companyId,
+        },
+      });
+      return allProducts;
+    } catch {
+      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
+    }
+  }
 
   async getSizesByNameOrCreate(params: GetSizesOrCreate) {
     let sizes = await this.prisma.sizes.findFirst({
@@ -74,7 +74,7 @@ export class sizeRepository {
           id: datas.id,
         },
         data: {
-          name: datas.size,
+          name: datas.name,
         },
       });
     } catch {

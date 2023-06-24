@@ -13,6 +13,7 @@ import { moduleSize } from './size/size.module';
 import { stripe } from './Stripe/stripe.module';
 import { favoriteModule } from './Favorite/favorite.module';
 import { CategoryModule } from './Category/category.module';
+import { AmazonModule } from './AmazonS3/amazon.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CategoryModule } from './Category/category.module';
     stripe,
     favoriteModule,
     CategoryModule,
+    AmazonModule,
   ],
   controllers: [],
   providers: [],

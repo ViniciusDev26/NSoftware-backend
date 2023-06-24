@@ -50,16 +50,20 @@ export class productController {
   }
 
   @Post('/')
-  async registerProduct(@Body() params: CreateProductDTO) {
-    const service = await this.ProductService.saveProduct(params);
-    return service;
-  }
-
-  @Post('/Image')
   @UseInterceptors(FileInterceptor('image'))
-  async registerImageProduct(@UploadedFile() file: any) {
-    console.log(file);
-
-    return true;
+  async registerProduct(
+    @Body() params: CreateProductDTO,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const data = {
+      categoryName: params.categoryName,
+      companyId: params.companyId,
+      image: file,
+      name: params.name,
+      sizeName: params.sizeName,
+      value: params.value,
+    };
+    const service = await this.ProductService.saveProduct(data);
+    return service;
   }
 }

@@ -23,7 +23,6 @@ export class AddressController {
       houseNumber: parseInt(houseNumber),
       district,
     };
-    console.log(typeof lat);
     const registerAddress = await this.service.register(bodyKit);
     return registerAddress;
   }

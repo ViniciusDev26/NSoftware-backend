@@ -14,7 +14,7 @@ type addressProops = {
 
 @Injectable()
 export class addressPrismaRepository {
-  constructor(private readonly Prisma: PrismaService) { }
+  constructor(private readonly Prisma: PrismaService) {}
 
   async save(data: Partial<AddressDTO>) {
     const verifyAccount = await this.Prisma.address.findFirst({
@@ -28,7 +28,6 @@ export class addressPrismaRepository {
         HttpStatus.BAD_REQUEST,
       );
     }
-    console.log(verifyAccount);
 
     try {
       const saveInBd = await this.Prisma.address.create({
@@ -41,7 +40,6 @@ export class addressPrismaRepository {
           street: data.street,
         },
       });
-      console.log(saveInBd);
       await this.Prisma.account.update({
         where: {
           id: data.AccountId,
@@ -52,7 +50,6 @@ export class addressPrismaRepository {
       });
       return saveInBd;
     } catch (error) {
-      console.log(error);
       throw new HttpException('Error ', HttpStatus.BAD_REQUEST);
     }
   }

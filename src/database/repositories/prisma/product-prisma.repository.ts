@@ -4,7 +4,7 @@ import { PrismaService } from 'src/database/services/prisma.service';
 
 type datasForRegister = {
   companyId: number;
-  image: string;
+  image: any;
   name: string;
   sizeName: string;
   value: number;

@@ -1,21 +1,21 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { sizeRepository } from 'src/database/repositories/prisma/size-prisma.repository';
+import { SizeRepository } from 'src/database/repositories/prisma/size-prisma.repository';
 import { createSizeDTO } from '../dtos/createSize.dtos';
 
 @Injectable()
 export class sizeService {
-  constructor(readonly repository: sizeRepository) {}
+  constructor(readonly repository: SizeRepository) {}
   async save(body: Partial<createSizeDTO>) {
     const saveSize = await this.repository.save(body);
     return saveSize;
   }
 
-  async getsizes(idProduct) {
-    if (!idProduct) {
+  async getsizes(companyId: number) {
+    if (!companyId) {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
-    // const getAllProduct = await this.repository.getAllProducts(idProduct);
-    return true;
+    const getAllSizes = await this.repository.getAllProducts(companyId);
+    return getAllSizes;
   }
 
   async deleteSize(id: any) {

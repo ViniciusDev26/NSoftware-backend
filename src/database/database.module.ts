@@ -13,7 +13,7 @@ import { roleRepository } from './repositories/prisma/role-prisma.repository';
 import { PatchAccountRepository } from './interfaces/patchAccountRepository';
 import { DeleteAccountByIdRepository } from './interfaces/DeleteAccountRepository';
 import { getClientsRepository } from './interfaces/getClientsRepository';
-import { sizeRepository } from './repositories/prisma/size-prisma.repository';
+import { SizeRepository } from './repositories/prisma/size-prisma.repository';
 import { FavoritePrismaRepository } from './repositories/prisma/favorite-prisma.repository';
 import { CategoryRepository } from './repositories/prisma/category-prisma.repository';
 
@@ -33,7 +33,7 @@ import { CategoryRepository } from './repositories/prisma/category-prisma.reposi
     { provide: DeleteAccountByIdRepository, useClass: AccountPrismaRepository },
     { provide: getClientsRepository, useClass: AccountPrismaRepository },
 
-    sizeRepository,
+    SizeRepository,
     productPrismaRepository,
     addressPrismaRepository,
     orderPrismaRepository,
@@ -52,7 +52,7 @@ import { CategoryRepository } from './repositories/prisma/category-prisma.reposi
     productPrismaRepository,
     getClientsRepository,
     orderPrismaRepository,
-    sizeRepository,
+    SizeRepository,
     addressPrismaRepository,
     companysPrismaRepository,
     authorizationRepository,

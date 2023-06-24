@@ -16,7 +16,6 @@ export class FavoritePrismaRepository {
       });
       return save;
     } catch (error) {
-      console.log(error);
       throw new HttpException('Error - Invalid params', HttpStatus.BAD_REQUEST);
     }
   }

@@ -40,7 +40,6 @@ export class CategoryRepository {
         },
       });
     }
-    console.log(category);
 
     return category;
   }

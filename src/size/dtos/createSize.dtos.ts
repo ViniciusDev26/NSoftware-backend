@@ -10,15 +10,9 @@ export abstract class createSizeDTO {
 
   @IsString()
   @ApiProperty()
-  size: string;
+  name: string;
 
-  @ApiProperty()
   @IsNumber()
   @Type(() => Number)
-  productId: number;
-
-  @ApiProperty()
-  @IsNumber()
-  @Type(() => Number)
-  orderId: number;
+  companyId: number;
 }

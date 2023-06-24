@@ -15,7 +15,6 @@ export class CategoryController {
       category,
       companyId,
     };
-    console.log(data);
 
     const returnService = await this.service.save(data);
     return returnService;
