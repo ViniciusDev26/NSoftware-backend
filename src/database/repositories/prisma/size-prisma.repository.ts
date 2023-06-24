@@ -2,6 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/services/prisma.service';
 import { createSizeDTO } from 'src/size/dtos/createSize.dtos';
 
+interface GetSizesOrCreate {
+  companyId: number;
+  name: string;
+}
+
 @Injectable()
 export class sizeRepository {
   constructor(readonly prisma: PrismaService) {}
@@ -17,17 +22,37 @@ export class sizeRepository {
     }
   }
 
-  async getAllProducts({ idProduct }) {
-    try {
-      const allProducts = await this.prisma.sizes.findMany({
-        where: {
-          productId: idProduct,
+  // async getAllProducts({ idProduct }) {
+  //   try {
+  //     const allProducts = await this.prisma.sizes.findMany({
+  //       where: {
+  //         productId: idProduct,
+  //       },
+  //     });
+  //     return allProducts;
+  //   } catch {
+  //     throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
+  //   }
+  // }
+
+  async getSizesByNameOrCreate(params: GetSizesOrCreate) {
+    let sizes = await this.prisma.sizes.findFirst({
+      where: {
+        companyId: params.companyId,
+        name: params.name,
+      },
+    });
+
+    if (!sizes) {
+      sizes = await this.prisma.sizes.create({
+        data: {
+          companyId: params.companyId,
+          name: params.name,
         },
       });
-      return allProducts;
-    } catch {
-      throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
+
+    return sizes;
   }
 
   async deletion({ id }: { id: number }): Promise<void> {
@@ -49,9 +74,7 @@ export class sizeRepository {
           id: datas.id,
         },
         data: {
-          orderId: datas.orderId,
-          productId: datas.productId,
-          size: datas.size,
+          name: datas.size,
         },
       });
     } catch {

@@ -6,6 +6,7 @@ import { FindAccountByEmailRepository } from 'src/database/interfaces/FindAccoun
 import { PatchAccountRepository } from 'src/database/interfaces/patchAccountRepository';
 import { DeleteAccountByIdRepository } from 'src/database/interfaces/DeleteAccountRepository';
 import { getClientsRepository } from 'src/database/interfaces/getClientsRepository';
+import { CreateAccountDTO } from 'src/account/dtos/create-account.dto';
 
 @Injectable()
 export class AccountPrismaRepository
@@ -18,7 +19,7 @@ export class AccountPrismaRepository
 {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async save(data: any): Promise<void> {
+  async save(data: CreateAccountDTO): Promise<void> {
     const emailExiste = await this.prismaService.account.findFirst({
       where: {
         email: data.email,
@@ -27,8 +28,16 @@ export class AccountPrismaRepository
     if (emailExiste) {
       throw new HttpException('Erro - Email já em uso', HttpStatus.BAD_REQUEST);
     }
+
     const saving = await this.prismaService.account.create({
-      data,
+      data: {
+        email: data.email,
+        name: data.name,
+        password: data.password,
+        companyId: data.companyId,
+        codeEmployee: data.codeEmployee,
+        contact: data.contact,
+      },
     });
 
     if (saving) {

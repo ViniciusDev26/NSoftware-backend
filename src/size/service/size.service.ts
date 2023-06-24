@@ -14,8 +14,8 @@ export class sizeService {
     if (!idProduct) {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }
-    const getAllProduct = await this.repository.getAllProducts(idProduct);
-    return getAllProduct;
+    // const getAllProduct = await this.repository.getAllProducts(idProduct);
+    return true;
   }
 
   async deleteSize(id: any) {

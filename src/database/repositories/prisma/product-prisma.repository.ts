@@ -1,15 +1,27 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/services/prisma.service';
-import { companiesDTO } from 'src/product/dtos/companies.dto';
+// import { companiesDTO } from 'src/product/dtos/CreateProduct.dto';
 
 type datasForRegister = {
   companyId: number;
   image: string;
   name: string;
-  recipeId: number;
-  sizeId: number;
+  sizeName: string;
   value: number;
 };
+
+interface LinkWithCategoriesParams {
+  productId: number;
+  categoriesId: number | number[];
+}
+interface LinkWithSizesParams {
+  productId: number;
+  sizeInformateId: number | number[];
+}
+
+interface GetWithIdParams {
+  idProduct: number;
+}
 
 @Injectable()
 export class productPrismaRepository {
@@ -25,7 +37,7 @@ export class productPrismaRepository {
           companyId: body.companyID,
         },
         include: {
-          Sizes: true,
+          ProductsBySizes: true,
         },
       });
       return allProducts;
@@ -39,11 +51,9 @@ export class productPrismaRepository {
       const saveProduct = await this.Prisma.products.create({
         data: {
           companyId: params.companyId,
-          sizeId: params.sizeId,
           image: params.image,
           name: params.name,
           value: params.value,
-          recipeId: params.recipeId,
         },
       });
       return saveProduct;
@@ -52,8 +62,49 @@ export class productPrismaRepository {
     }
   }
 
-  async getWithId(query: Partial<companiesDTO>) {
-    const { idProduct } = query;
+  async linkWithCategories(params: LinkWithCategoriesParams) {
+    const categories = Array.isArray(params.categoriesId)
+      ? params.categoriesId
+      : [params.categoriesId];
+
+    for (const categoryId of categories) {
+      await this.Prisma.products.update({
+        data: {
+          productsByCategory: {
+            create: {
+              categoryId: categoryId,
+            },
+          },
+        },
+        where: {
+          id: params.productId,
+        },
+      });
+    }
+  }
+  async linkWithSizes(params: LinkWithSizesParams) {
+    const sizes = Array.isArray(params.sizeInformateId)
+      ? params.sizeInformateId
+      : [params.sizeInformateId];
+
+    for (const sizeIdOf of sizes) {
+      await this.Prisma.products.update({
+        data: {
+          ProductsBySizes: {
+            create: {
+              sizeId: sizeIdOf,
+            },
+          },
+        },
+        where: {
+          id: params.productId,
+        },
+      });
+    }
+  }
+
+  async getWithId(params: GetWithIdParams) {
+    const { idProduct } = params;
 
     try {
       const getItem = await this.Prisma.products.findUnique({
@@ -61,7 +112,7 @@ export class productPrismaRepository {
           id: idProduct,
         },
         include: {
-          Sizes: true,
+          ProductsBySizes: true,
         },
       });
       return getItem;

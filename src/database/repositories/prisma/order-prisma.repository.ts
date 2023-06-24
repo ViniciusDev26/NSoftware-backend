@@ -51,10 +51,9 @@ export class orderPrismaRepository implements OrderRepository {
           },
           Products: {
             include: {
-              Sizes: true,
+              ProductsBySizes: true,
             },
           },
-          Sizes: true,
         },
       });
       return orders;
@@ -76,10 +75,9 @@ export class orderPrismaRepository implements OrderRepository {
           },
           Products: {
             include: {
-              Sizes: true,
+              ProductsBySizes: true,
             },
           },
-          Sizes: true,
         },
       });
       return orders;

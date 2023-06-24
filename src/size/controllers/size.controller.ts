@@ -13,6 +13,7 @@ import { sizeService } from '../service/size.service';
 @Controller('/size')
 export class sizeController {
   constructor(readonly service: sizeService) {}
+
   @Post('/')
   async createSize(
     @Body('productId') productId: number,

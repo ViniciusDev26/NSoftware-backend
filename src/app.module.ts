@@ -12,6 +12,7 @@ import { roleModule } from './role/role.module';
 import { moduleSize } from './size/size.module';
 import { stripe } from './Stripe/stripe.module';
 import { favoriteModule } from './Favorite/favorite.module';
+import { CategoryModule } from './Category/category.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { favoriteModule } from './Favorite/favorite.module';
     moduleSize,
     stripe,
     favoriteModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [],

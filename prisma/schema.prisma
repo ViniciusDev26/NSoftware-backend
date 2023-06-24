@@ -49,9 +49,9 @@ model Address {
 }
 
 model Companys {
-  id           Int       @unique @default(autoincrement())
-  companyCode  String    @unique
-  codeEmployee Int       @unique
+  id           Int        @unique @default(autoincrement())
+  companyCode  String     @unique
+  codeEmployee Int        @unique
   companyName  String
   access       String
   lat          String
@@ -61,44 +61,46 @@ model Companys {
   district     String
   Account      Account[]
   Role         Role[] // Alterado de Roles para Role
+  Category     Category[]
+  Sizes        Sizes[]
 
   @@map("companies")
 }
 
 model Products {
-  id              Int               @unique @default(autoincrement())
-  companyId       Int
-  name            String
-  value           Int
-  image           String
-  sizeId          Int?
-  recipeId        Int?
-  relationRequest RelationRequest[]
-  Sizes           Sizes[]
-  Order           Order[]
-  orderId         Int?
-  Category        Category[]
-  Favorites       Favorites[]
+  id                 Int                  @unique @default(autoincrement())
+  companyId          Int
+  name               String
+  value              Int
+  image              String
+  sizeId             Int?
+  recipeId           Int?
+  relationRequest    RelationRequest[]
+  Order              Order[]
+  orderId            Int?
+  Favorites          Favorites[]
+  productsByCategory ProductsByCategory[]
+  ProductsBySizes    ProductsBySizes[]
 
   @@map("products")
 }
 
 model Sizes {
-  id        Int      @unique @default(autoincrement())
-  size      String
-  productId Int
-  Product   Products @relation(fields: [productId], references: [id])
-  Order     Order[]
-  orderId   Int?
+  id              Int               @unique @default(autoincrement())
+  name            String
+  companyId       Int
+  company         Companys?         @relation(fields: [companyId], references: [id])
+  ProductsBySizes ProductsBySizes[]
 
   @@map("sizes")
 }
 
 model Category {
-  id         Int       @unique @default(autoincrement())
-  category   String
-  Products   Products? @relation(fields: [productsId], references: [id])
-  productsId Int?
+  id                 Int                  @unique @default(autoincrement())
+  name               String
+  companyId          Int
+  company            Companys?            @relation(fields: [companyId], references: [id])
+  productsByCategory ProductsByCategory[]
 
   @@map("categories")
 }
@@ -115,6 +117,24 @@ model Favorites {
   @@map("favorites")
 }
 
+model ProductsByCategory {
+  productId  Int
+  categoryId Int
+  Product    Products? @relation(fields: [productId], references: [id])
+  Category   Category? @relation(fields: [categoryId], references: [id])
+
+  @@id([productId, categoryId])
+}
+
+model ProductsBySizes {
+  productId Int
+  sizeId    Int
+  Product   Products? @relation(fields: [productId], references: [id])
+  Size      Sizes?    @relation(fields: [sizeId], references: [id])
+
+  @@id([productId, sizeId])
+}
+
 model Order {
   id        Int      @unique @default(autoincrement())
   companyId Int
@@ -129,7 +149,6 @@ model Order {
 
   account         Account           @relation(fields: [userId], references: [id])
   Products        Products?         @relation(fields: [productId], references: [id])
-  Sizes           Sizes?            @relation(fields: [sizeId], references: [id])
   relationRequest RelationRequest[]
 
   @@map("orders")

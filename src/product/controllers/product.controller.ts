@@ -6,8 +6,12 @@ import {
   HttpStatus,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { companiesDTO } from '../dtos/companies.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateProductDTO } from '../dtos/CreateProduct.dto';
+import { GetProductById } from '../dtos/GetProductById.dto';
 import { productService } from '../services/product.service';
 
 @Controller('/product')
@@ -34,22 +38,28 @@ export class productController {
   }
 
   @Get('/id')
-  async getProductForId(@Query('idProduct') idProduct: number) {
-    const query: Partial<companiesDTO> = { idProduct };
-
-    if (!query.idProduct) {
+  async getProductForId(@Query('idProduct') params: GetProductById) {
+    if (!params.productId) {
       throw new HttpException(
         'Erro - parametros inválidos',
         HttpStatus.BAD_REQUEST,
       );
     }
-    const getProduct = await this.ProductService.getWithId(query);
+    const getProduct = await this.ProductService.getWithId(params);
     return getProduct;
   }
 
   @Post('/')
-  async registerProduct(@Body() params: any) {
+  async registerProduct(@Body() params: CreateProductDTO) {
     const service = await this.ProductService.saveProduct(params);
     return service;
+  }
+
+  @Post('/Image')
+  @UseInterceptors(FileInterceptor('image'))
+  async registerImageProduct(@UploadedFile() file: any) {
+    console.log(file);
+
+    return true;
   }
 }

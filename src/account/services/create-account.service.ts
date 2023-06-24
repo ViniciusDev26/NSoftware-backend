@@ -20,6 +20,7 @@ interface CreateAccountServiceParams {
   obs?: string;
   codeEmployee?: number;
   orderId?: number;
+  contact: string;
 }
 
 @Injectable()
@@ -43,6 +44,7 @@ export class CreateAccountService {
       password: hashPassword,
       companyId: params.companyId,
       codeEmployee: params.codeEmployee,
+      contact: params.contact,
     };
 
     await this.createAccountRepository.save(account);

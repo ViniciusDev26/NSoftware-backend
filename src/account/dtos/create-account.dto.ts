@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsMobilePhone,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export abstract class CreateAccountDTO {
   @IsOptional()
@@ -27,4 +33,9 @@ export abstract class CreateAccountDTO {
   @IsOptional()
   @ApiProperty()
   codeEmployee: number;
+
+  @IsMobilePhone('pt-BR')
+  @IsOptional()
+  @ApiProperty()
+  contact: string;
 }

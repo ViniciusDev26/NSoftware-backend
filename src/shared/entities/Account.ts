@@ -49,7 +49,7 @@ type Product = {
   name: string;
   value: number;
   image: string;
-  sizesId: number;
+  sizeId: number;
   recipeId?: number;
   RelationRequest: RelationRequest[];
 };
