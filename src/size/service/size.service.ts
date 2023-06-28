@@ -10,7 +10,7 @@ export class sizeService {
     return saveSize;
   }
 
-  async getsizes(companyId: number) {
+  async getsizes(companyId: string) {
     if (!companyId) {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);
     }

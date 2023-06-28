@@ -2,12 +2,12 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/services/prisma.service';
 
 type employeeProps = {
-  companyId: number;
-  AddressId: number;
+  companyId: string;
+  AddressId: string;
   name: string;
   email: string;
   password: string;
-  roleId: number;
+  roleId: string;
   wage: number;
   obs: string;
   codeEmployee: number;

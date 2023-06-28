@@ -3,7 +3,7 @@ import { PrismaService } from 'src/database/services/prisma.service';
 import { createSizeDTO } from 'src/size/dtos/createSize.dtos';
 
 interface GetSizesOrCreate {
-  companyId: number;
+  companyId: string;
   name: string;
 }
 
@@ -22,7 +22,7 @@ export class SizeRepository {
     }
   }
 
-  async getAllProducts(companyId: number) {
+  async getAllProducts(companyId: string) {
     try {
       const allProducts = await this.prisma.sizes.findMany({
         where: {
@@ -55,7 +55,7 @@ export class SizeRepository {
     return sizes;
   }
 
-  async deletion({ id }: { id: number }): Promise<void> {
+  async deletion({ id }: { id: string }): Promise<void> {
     try {
       await this.prisma.sizes.delete({
         where: {

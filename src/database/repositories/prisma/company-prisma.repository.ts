@@ -26,7 +26,7 @@ export class companysPrismaRepository {
     }
   }
 
-  async receiveCompany(id: number) {
+  async receiveCompany(id: string) {
     try {
       const receive = await this.prisma.companys.findFirst({
         where: {

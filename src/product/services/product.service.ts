@@ -2,21 +2,35 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CategoryRepository } from 'src/database/repositories/prisma/category-prisma.repository';
 import { productPrismaRepository } from 'src/database/repositories/prisma/product-prisma.repository';
 import { SizeRepository } from 'src/database/repositories/prisma/size-prisma.repository';
-import { readFileSync } from 'fs';
 import { UploadFiles3Provider } from 'src/AmazonS3/service/s3.service';
-// import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { CreateCombroDTO } from '../dtos/CreateCombo.dto';
 type datasForRegister = {
-  companyId: number;
+  companyId: string;
   name: string;
   value: number;
   sizeName: string;
   categoryName: string;
   image: any;
+  onlyCombo: boolean;
 };
 
 interface GetWithIdParams {
-  productId: number;
+  productId: string;
 }
+
+type registerComboProps = {
+  companyId: string;
+  image: any;
+  productsId: string;
+  name: string;
+  price: number;
+  description: string;
+};
+
+type ListComboProps = {
+  page: number;
+  companyId: string;
+};
 
 @Injectable()
 export class productService {
@@ -33,23 +47,36 @@ export class productService {
   }
 
   async saveProduct(params: datasForRegister) {
-    const { companyId, value, sizeName, categoryName, image } = params;
+    const { companyId, value, sizeName, categoryName, image, name } = params;
 
-    if (!companyId || !value || !sizeName || !categoryName || !image) {
+    if (!companyId || !value || !sizeName || !categoryName || !image || !name) {
+      console.log(companyId, value, sizeName, categoryName, image);
       throw new HttpException(
         'Erro - parametros inválidos',
         HttpStatus.BAD_REQUEST,
       );
     }
-    const category = await this.categoriesRepository.getCategoryByNameOrCreate({
-      companyId,
-      name: categoryName,
-    });
+    await this.product.verifyProductExist(name);
 
-    const size = await this.sizeRepository.getSizesByNameOrCreate({
-      companyId,
-      name: sizeName,
-    });
+    const categories = [];
+    for (const categoryItem of categoryName) {
+      const category =
+        await this.categoriesRepository.getCategoryByNameOrCreate({
+          companyId,
+          name: categoryItem,
+        });
+      categories.push(category);
+    }
+
+    const sizies = [];
+
+    for (const sizeItem of sizeName) {
+      const size = await this.sizeRepository.getSizesByNameOrCreate({
+        companyId,
+        name: sizeItem,
+      });
+      sizies.push(size);
+    }
 
     const s3 = await this.S3.upload(params.image);
 
@@ -59,13 +86,9 @@ export class productService {
       value: params.value,
       sizeName: params.sizeName,
       categoryName: params.categoryName,
-      image: s3,
+      onlyCombo: params.onlyCombo,
+      image: s3.key,
     };
-
-    console.log(paramsWithImage);
-    if (1 == 1) {
-      return;
-    }
 
     const registerProducts = await this.product.registerProduct(
       paramsWithImage,
@@ -73,12 +96,12 @@ export class productService {
 
     await this.product.linkWithCategories({
       productId: registerProducts.id,
-      categoriesId: category.id,
+      categoriesId: categories.map((category) => category.id),
     });
 
     await this.product.linkWithSizes({
       productId: registerProducts.id,
-      sizeInformateId: size.id,
+      sizeInformateId: sizies.map((size) => size.id),
     });
     return registerProducts;
   }
@@ -89,5 +112,50 @@ export class productService {
     });
 
     return get;
+  }
+
+  async deleteProduct(id) {
+    if (!id) {
+      throw new HttpException(
+        'Erro - Id não informado',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const deletion = await this.product.deleteProduct(id);
+    return deletion;
+  }
+
+  async updateCombo(param: registerComboProps) {
+    console.log(param);
+    for (const id of param.productsId) {
+      const verifyProductExist = await this.product.verifyProductById(id);
+      if (!verifyProductExist) {
+        throw new HttpException(
+          'Erro - Produto não encontrado ',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
+
+    const s3 = await this.S3.upload(param.image);
+    const data = {
+      name: param.name,
+      price: param.price,
+      image: s3.key,
+      productsId: param.productsId,
+      description: param.description,
+      companyId: param.companyId,
+    };
+    await this.product.registerCombo(data);
+  }
+  async ListCombo(params: ListComboProps) {
+    if (!params.companyId) {
+      throw new HttpException(
+        'Erro - CompanyId não encontrado',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const list = await this.product.listCombos(params);
+    return list;
   }
 }

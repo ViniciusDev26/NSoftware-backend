@@ -1,17 +1,22 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
+  Param,
   Post,
   Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateCombroDTO } from '../dtos/CreateCombo.dto';
 import { CreateProductDTO } from '../dtos/CreateProduct.dto';
+import { deleteProductDTO } from '../dtos/deleteProduct';
 import { GetProductById } from '../dtos/GetProductById.dto';
+import { ListComboDTO } from '../dtos/ListCombo.dto';
 import { productService } from '../services/product.service';
 
 @Controller('/product')
@@ -20,7 +25,7 @@ export class productController {
 
   @Get('/')
   async getProduct(
-    @Query('companyId') companyId: number,
+    @Query('companyId') companyId: string,
     @Query('page') page: number,
   ) {
     const body = {
@@ -33,8 +38,13 @@ export class productController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const service = await this.ProductService.execute(body);
-    return service;
+    const products = await this.ProductService.execute(body);
+    return products.map((product) => {
+      return {
+        ...product,
+        url: `http://localhost:3000/s3?key=${product.image}`,
+      };
+    });
   }
 
   @Get('/id')
@@ -62,8 +72,39 @@ export class productController {
       name: params.name,
       sizeName: params.sizeName,
       value: params.value,
+      onlyCombo: params.onlyCombo,
     };
     const service = await this.ProductService.saveProduct(data);
     return service;
+  }
+
+  @Delete('/:id')
+  async deleteProduct(@Param('id') id: deleteProductDTO) {
+    const deletion = await this.ProductService.deleteProduct(id);
+    return deletion;
+  }
+
+  @Post('/combo')
+  @UseInterceptors(FileInterceptor('image'))
+  async uploadCombo(
+    @Body() params: CreateCombroDTO,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const data = {
+      name: params.name,
+      price: params.price,
+      image: file,
+      productsId: params.productsId,
+      companyId: params.companyId,
+      description: params.description,
+    };
+    const register = await this.ProductService.updateCombo(data);
+    return register;
+  }
+
+  @Get('/combo')
+  async lisCombos(@Query() params: ListComboDTO) {
+    const List = await this.ProductService.ListCombo(params);
+    return List;
   }
 }

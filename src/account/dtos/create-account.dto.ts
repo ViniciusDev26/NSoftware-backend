@@ -23,10 +23,9 @@ export abstract class CreateAccountDTO {
   password: string;
 
   @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
+  @IsString()
   @ApiProperty()
-  companyId: number;
+  companyId: string;
 
   @Type(() => Number)
   @IsNumber()

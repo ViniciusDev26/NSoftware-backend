@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AddressDTO } from 'src/address/dtos/adress.dto';
 import { PrismaService } from 'src/database/services/prisma.service';
 type addressProops = {
-  id: number;
+  id: string;
   AccountId: string;
   lat: string;
   lng: string;

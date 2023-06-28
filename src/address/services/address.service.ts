@@ -3,7 +3,7 @@ import { addressPrismaRepository } from 'src/database/repositories/prisma/addres
 import { AddressDTO } from '../dtos/adress.dto';
 
 type addressProops = {
-  id: number;
+  id: string;
   lat: string;
   lng: string;
   AccountId: string;

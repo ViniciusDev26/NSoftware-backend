@@ -16,10 +16,10 @@ model Account {
   email     String  @unique
   password  String
   contact   String  @default("")
-  companyId Int?
-  addressId Int?
-  orderId   Int?
-  roleId    Int?
+  companyId String?
+  addressId String?
+  orderId   String?
+  roleId    String?
   wage      Int?
   obs       String?
 
@@ -34,7 +34,7 @@ model Account {
 }
 
 model Address {
-  id          Int       @unique @default(autoincrement())
+  id          String    @unique @default(uuid())
   lat         String
   lng         String
   AccountId   String
@@ -49,7 +49,7 @@ model Address {
 }
 
 model Companys {
-  id           Int        @unique @default(autoincrement())
+  id           String     @unique @default(uuid())
   companyCode  String     @unique
   codeEmployee Int        @unique
   companyName  String
@@ -68,24 +68,45 @@ model Companys {
 }
 
 model Products {
-  id                 Int                  @unique @default(autoincrement())
-  companyId          Int
+  id                 String               @unique @default(uuid())
+  companyId          String
   name               String
   value              Int
   image              String
+  onlyCombo          Boolean              @default(false)
   relationRequest    RelationRequest[]
   Order              Order[]
   Favorites          Favorites[]
   productsByCategory ProductsByCategory[]
   ProductsBySizes    ProductsBySizes[]
+  productsByCombo    productsByCombo[]
 
   @@map("products")
 }
 
-model Sizes {
-  id              Int               @unique @default(autoincrement())
+model productsByCombo {
+  productId String
+  comboId   String
+  companyId String
+  Product   Products @relation(fields: [productId], references: [id], onDelete: Cascade)
+  Combo     combo    @relation(fields: [comboId], references: [id], onDelete: Cascade)
+
+  @@id([productId, comboId])
+}
+
+model combo {
+  id              String            @unique @default(uuid())
   name            String
-  companyId       Int
+  companyId       String
+  price           Int
+  Image           String
+  productsByCombo productsByCombo[]
+}
+
+model Sizes {
+  id              String            @unique @default(uuid())
+  name            String
+  companyId       String
   company         Companys?         @relation(fields: [companyId], references: [id])
   ProductsBySizes ProductsBySizes[]
 
@@ -93,9 +114,9 @@ model Sizes {
 }
 
 model Category {
-  id                 Int                  @unique @default(autoincrement())
+  id                 String               @unique @default(uuid())
   name               String
-  companyId          Int
+  companyId          String
   company            Companys?            @relation(fields: [companyId], references: [id])
   productsByCategory ProductsByCategory[]
 
@@ -103,8 +124,8 @@ model Category {
 }
 
 model Favorites {
-  id        Int      @unique @default(autoincrement())
-  productId Int
+  id        String   @unique @default(uuid())
+  productId String
   accountId String
   createdAt DateTime @default(now())
 
@@ -115,34 +136,34 @@ model Favorites {
 }
 
 model ProductsByCategory {
-  productId  Int
-  categoryId Int
-  Product    Products? @relation(fields: [productId], references: [id])
+  productId  String
+  categoryId String
+  Product    Products? @relation(fields: [productId], references: [id], onDelete: Cascade)
   Category   Category? @relation(fields: [categoryId], references: [id])
 
   @@id([productId, categoryId])
 }
 
 model ProductsBySizes {
-  productId Int
-  sizeId    Int
-  Product   Products? @relation(fields: [productId], references: [id])
+  productId String
+  sizeId    String
+  Product   Products? @relation(fields: [productId], references: [id], onDelete: Cascade)
   Size      Sizes?    @relation(fields: [sizeId], references: [id])
 
   @@id([productId, sizeId])
 }
 
 model Order {
-  id        Int      @unique @default(autoincrement())
-  companyId Int
+  id        String   @unique @default(uuid())
+  companyId String
   priority  Boolean
   status    String
   date      DateTime
   obs       String?
   userId    String
 
-  sizeId    Int?
-  productId Int?
+  sizeId    String?
+  productId String?
 
   account         Account           @relation(fields: [userId], references: [id])
   Products        Products?         @relation(fields: [productId], references: [id])
@@ -152,8 +173,8 @@ model Order {
 }
 
 model Role {
-  id        Int       @unique @default(autoincrement())
-  companyId Int
+  id        String    @unique @default(uuid())
+  companyId String
   role      String
   userId    String
   Account   Account[]
@@ -163,10 +184,10 @@ model Role {
 }
 
 model RelationRequest {
-  id        Int @unique @default(autoincrement())
-  productId Int
+  id        String @unique @default(uuid())
+  productId String
   quantity  Int
-  orderId   Int
+  orderId   String
 
   order   Order    @relation(fields: [orderId], references: [id])
   product Products @relation(fields: [productId], references: [id])
@@ -175,8 +196,8 @@ model RelationRequest {
 }
 
 model Stock {
-  id        Int    @unique @default(autoincrement())
-  companyId Int
+  id        String @unique @default(uuid())
+  companyId String
   name      String
   unidade   String
   unitPrice Int

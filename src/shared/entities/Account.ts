@@ -3,29 +3,17 @@ interface AccountProperties {
   email: string;
   password: string;
   id?: string;
-  companyId?: number;
-  addressId?: number;
-  orderId?: number;
-  roleId?: number;
+  companyId?: string;
+  addressId?: string;
+  orderId?: string;
+  roleId?: string;
   wage?: number;
   obs?: string;
   codeEmployee?: number;
 }
-type Company = {
-  id: number;
-  companyCode: string;
-  codeEmployee: number;
-  companyName: string;
-  access: string;
-  lat: string;
-  lng: string;
-  street: string;
-  houseNumber: number;
-  district: string;
-};
 
 type Address = {
-  id: number;
+  id: string;
   lat: string;
   lng: string;
   street: string;
@@ -33,38 +21,26 @@ type Address = {
   district: string;
   obs?: string;
   Order?: Order;
-  orderId?: number;
+  orderId?: string;
   Account: Account[];
 };
 
-type Role = {
-  id: number;
-  companyId: number;
-  role: string;
-};
-
 type Product = {
-  id: number;
-  companyId: number;
+  id: string;
+  companyId: string;
   name: string;
   value: number;
   image: string;
-  sizeId: number;
-  recipeId?: number;
+  sizeId: string;
+  recipeId?: string;
   RelationRequest: RelationRequest[];
 };
 
-type Size = {
-  id: number;
-  size: string;
-  productId: number;
-};
-
 type Order = {
-  id: number;
+  id: string;
   name: string;
   image: string;
-  companyId: number;
+  companyId: string;
   priority: boolean;
   status: string;
   date: Date;
@@ -80,21 +56,12 @@ type Order = {
 };
 
 type RelationRequest = {
-  id: number;
-  productId: number;
+  id: string;
+  productId: string;
   quantity: number;
-  orderId: number;
+  orderId: string;
   order: Order;
   product: Product;
-};
-
-type Stock = {
-  id: number;
-  companyId: number;
-  name: string;
-  unidade: string;
-  unitPrice: number;
-  quantity: number;
 };
 
 export class Account {

@@ -1,18 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
 
 export abstract class createSizeDTO {
-  @Type(() => Number)
-  @IsNumber()
+  @IsString()
   @ApiProperty()
-  id: number;
+  id: string;
 
   @IsString()
   @ApiProperty()
   name: string;
 
-  @IsNumber()
-  @Type(() => Number)
-  companyId: number;
+  @IsString()
+  companyId: string;
 }

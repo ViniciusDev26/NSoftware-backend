@@ -9,7 +9,7 @@ export class CategoryController {
   @Post('/')
   async saveCategories(
     @Body('category') category: string,
-    @Body('companyId') companyId: number,
+    @Body('companyId') companyId: string,
   ) {
     const data: CategoryDTO = {
       category,
@@ -21,7 +21,7 @@ export class CategoryController {
   }
 
   @Get('/')
-  async getCategories(@Query('companyId') companyId: number) {
+  async getCategories(@Query('companyId') companyId: string) {
     const data: Partial<CategoryDTO> = { companyId };
     const returnService = await this.service.get(data);
     return returnService;

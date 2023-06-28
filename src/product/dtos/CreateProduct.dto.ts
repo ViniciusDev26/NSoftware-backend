@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export abstract class CreateProductDTO {
-  @IsString()
+  @IsString({ each: true })
   @IsNotEmpty()
   categoryName: string;
 
@@ -17,12 +17,15 @@ export abstract class CreateProductDTO {
   @Type(() => Number)
   value: number;
 
-  @IsString()
+  @IsString({ each: true })
   @IsNotEmpty()
   sizeName: string;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  @Type(() => Number)
-  companyId: number;
+  companyId: string;
+
+  @IsBoolean()
+  @Type(() => Boolean)
+  onlyCombo: boolean;
 }

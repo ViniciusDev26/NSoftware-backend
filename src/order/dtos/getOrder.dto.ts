@@ -3,10 +3,9 @@ import { Type } from 'class-transformer';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export abstract class GetOrdertDTO {
-  @Type(() => Number)
-  @IsNumber()
+  @IsString()
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Type(() => Number)
   @IsNumber()
@@ -18,11 +17,10 @@ export abstract class GetOrdertDTO {
   @ApiProperty()
   userId?: string;
 
-  @Type(() => Number)
-  @IsNumber()
+  @IsString()
   @ApiProperty()
   @IsOptional()
-  companyId: number;
+  companyId: string;
 
   @Type(() => Boolean)
   @IsBoolean()
@@ -39,13 +37,11 @@ export abstract class GetOrdertDTO {
   @IsString()
   obs: string;
 
-  @Type(() => Number)
-  @IsNumber()
+  @IsString()
   @ApiProperty()
-  sizeId: number;
+  sizeId: string;
 
-  @Type(() => Number)
-  @IsNumber()
+  @IsString()
   @ApiProperty()
-  productId: number;
+  productId: string;
 }

@@ -10,6 +10,5 @@ export class CategoryDTO {
 
   @ApiProperty()
   @IsNumber()
-  @Transform(({ value }) => parseInt(value))
-  companyId: number;
+  companyId: string;
 }

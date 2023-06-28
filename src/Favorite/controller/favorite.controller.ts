@@ -9,7 +9,7 @@ export class FavoriteController {
   @Post('/')
   async favorite(
     @Query('userId') userId: string,
-    @Query('productId') productId: number,
+    @Query('productId') productId: string,
   ) {
     const datas: FavoriteDTO = { userId, productId };
     const favorited = await this.service.save(datas);

@@ -1,8 +1,8 @@
 import { Order } from '@prisma/client';
 
 export type orderProps = {
-  id: number;
-  companyId: number;
+  id: string;
+  companyId: string;
   userId: string;
   priority: boolean;
   status: string;
@@ -11,11 +11,11 @@ export type orderProps = {
   name: string;
   image: string;
   value: number;
-  sizeId: number;
+  sizeId: string;
   page: number;
   lng?: string;
   lat?: string;
-  productsId?: number;
+  productsId?: string;
   contact?: string;
 };
 

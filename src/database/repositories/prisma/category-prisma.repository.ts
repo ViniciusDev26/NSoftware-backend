@@ -3,7 +3,7 @@ import { CategoryDTO } from 'src/Category/dto/category.dto';
 import { PrismaService } from 'src/database/services/prisma.service';
 
 interface GetCategoryOrCreate {
-  companyId: number;
+  companyId: string;
   name: string;
 }
 

@@ -6,7 +6,7 @@ import { GetOrdertDTO } from '../dtos/getOrder.dto';
 export class orderService {
   constructor(readonly register: orderPrismaRepository) {}
 
-  async getOrders(params: Partial<GetOrdertDTO>) {
+  async getOrders(params: GetOrdertDTO) {
     const { companyId } = params;
     if (!companyId) {
       throw new HttpException('Error', HttpStatus.BAD_GATEWAY);

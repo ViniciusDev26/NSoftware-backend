@@ -3,12 +3,12 @@ import { employeeRepository } from 'src/database/repositories/prisma/employee-pr
 import { getEmployeeDTO } from '../dtos/getEmployee.dtos';
 
 type employeeProps = {
-  companyId: number;
-  AddressId: number;
+  companyId: string;
+  AddressId: string;
   name: string;
   email: string;
   password: string;
-  roleId: number;
+  roleId: string;
   wage: number;
   obs: string;
   codeEmployee: number;

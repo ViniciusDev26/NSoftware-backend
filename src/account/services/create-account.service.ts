@@ -13,13 +13,13 @@ interface CreateAccountServiceParams {
   name: string;
   email: string;
   password: string;
-  companyId: number;
-  addressId?: number;
-  roleId?: number;
+  companyId: string;
+  addressId?: string;
+  roleId?: string;
   wage?: number;
   obs?: string;
   codeEmployee?: number;
-  orderId?: number;
+  orderId?: string;
   contact: string;
 }
 

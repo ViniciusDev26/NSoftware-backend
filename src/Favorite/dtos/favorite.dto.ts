@@ -8,9 +8,7 @@ export class FavoriteDTO {
   @Type(() => String)
   userId: string;
 
-  @IsNumber()
+  @IsString()
   @ApiProperty()
-  @Type(() => Number)
-  @Transform(({ value }) => parseInt(value))
-  productId: number;
+  productId: string;
 }

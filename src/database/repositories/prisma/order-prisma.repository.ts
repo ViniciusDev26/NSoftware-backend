@@ -10,7 +10,7 @@ import { GetOrdertDTO } from 'src/order/dtos/getOrder.dto';
 export class orderPrismaRepository implements OrderRepository {
   constructor(readonly prisma: PrismaService) {}
 
-  async registerOrder(params: Partial<GetOrdertDTO>) {
+  async registerOrder(params) {
     try {
       const register = await this.prisma.order.create({
         data: {
@@ -30,7 +30,7 @@ export class orderPrismaRepository implements OrderRepository {
     }
   }
 
-  async getOrders(params: Partial<orderProps>) {
+  async getOrders(params) {
     const { page } = params;
     const skip = (10 * (page - 1)) as number;
 
@@ -86,7 +86,7 @@ export class orderPrismaRepository implements OrderRepository {
     }
   }
 
-  async changeOnder(params: Partial<GetOrdertDTO>) {
+  async changeOnder(params) {
     try {
       const change = await this.prisma.order.update({
         where: {

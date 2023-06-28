@@ -16,8 +16,8 @@ export class sizeController {
 
   @Post('/')
   async createSize(
-    @Body('companyId') companyId: number,
-    @Body('id') id: number,
+    @Body('companyId') companyId: string,
+    @Body('id') id: string,
     @Body('name') name: string,
   ) {
     const body: Partial<createSizeDTO> = {
@@ -30,14 +30,14 @@ export class sizeController {
   }
 
   @Get('/')
-  async getSizes(@Query('companyId') companyId: number) {
+  async getSizes(@Query('companyId') companyId: string) {
     console.log(companyId);
     const get = await this.service.getsizes(companyId);
     return get;
   }
 
   @Delete('/')
-  async deleteSize(@Query('id') id: number) {
+  async deleteSize(@Query('id') id: string) {
     const identificador: Partial<createSizeDTO> = { id };
     const deleteSize = await this.service.deleteSize(identificador);
     return deleteSize;
@@ -45,9 +45,9 @@ export class sizeController {
 
   @Patch('/')
   async patchSize(
-    @Query('id') id: number,
+    @Query('id') id: string,
     @Body('name') name: string,
-    @Body('companyId') companyId: number,
+    @Body('companyId') companyId: string,
   ) {
     const body: createSizeDTO = {
       id,
