@@ -1,5 +1,6 @@
 import { Body, Controller, Patch, Post } from '@nestjs/common';
 import { AddressDTO } from '../dtos/adress.dto';
+import { uploadAddressDTO } from '../dtos/upload-address.dto';
 import { AddressService } from '../services/address.service';
 
 @Controller('/address')
@@ -28,7 +29,7 @@ export class AddressController {
   }
 
   @Patch('/')
-  async pathAddress(@Body() params) {
+  async pathAddress(@Body() params: uploadAddressDTO) {
     const changeAddress = await this.service.change(params);
 
     return changeAddress;

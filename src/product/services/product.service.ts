@@ -7,7 +7,7 @@ import { CreateCombroDTO } from '../dtos/CreateCombo.dto';
 type datasForRegister = {
   companyId: string;
   name: string;
-  value: number;
+  price: number;
   sizeName: string;
   categoryName: string;
   image: any;
@@ -39,7 +39,7 @@ export class productService {
     private readonly categoriesRepository: CategoryRepository,
     private readonly sizeRepository: SizeRepository,
     private readonly S3: UploadFiles3Provider,
-  ) {}
+  ) { }
 
   async execute(body: any) {
     const allProducts = await this.product.getProducts(body);
@@ -47,10 +47,10 @@ export class productService {
   }
 
   async saveProduct(params: datasForRegister) {
-    const { companyId, value, sizeName, categoryName, image, name } = params;
+    const { companyId, price, sizeName, categoryName, image, name } = params;
 
-    if (!companyId || !value || !sizeName || !categoryName || !image || !name) {
-      console.log(companyId, value, sizeName, categoryName, image);
+    if (!companyId || !price || !sizeName || !categoryName || !image || !name) {
+      console.log(companyId, price, sizeName, categoryName, image);
       throw new HttpException(
         'Erro - parametros inválidos',
         HttpStatus.BAD_REQUEST,
@@ -83,7 +83,7 @@ export class productService {
     const paramsWithImage = {
       companyId: params.companyId,
       name: params.name,
-      value: params.value,
+      price: params.price,
       sizeName: params.sizeName,
       categoryName: params.categoryName,
       onlyCombo: params.onlyCombo,

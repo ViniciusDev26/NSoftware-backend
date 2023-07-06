@@ -38,7 +38,9 @@ export class productController {
         HttpStatus.BAD_REQUEST,
       );
     }
+
     const products = await this.ProductService.execute(body);
+
     return products.map((product) => {
       return {
         ...product,
@@ -71,7 +73,7 @@ export class productController {
       image: file,
       name: params.name,
       sizeName: params.sizeName,
-      value: params.value,
+      price: params.price,
       onlyCombo: params.onlyCombo,
     };
     const service = await this.ProductService.saveProduct(data);
@@ -105,6 +107,11 @@ export class productController {
   @Get('/combo')
   async lisCombos(@Query() params: ListComboDTO) {
     const List = await this.ProductService.ListCombo(params);
-    return List;
+    return List.map((product) => {
+      return {
+        ...product,
+        url: `http://localhost:3000/s3?key=${product.Image}`,
+      };
+    });
   }
 }

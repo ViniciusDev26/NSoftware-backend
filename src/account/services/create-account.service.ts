@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Crypter } from 'src/shared/cryptography/protocols/crypter';
-import { Account } from '../../shared/entities/Account';
 import { CreateAccountRepository } from 'src/database/interfaces/CreateAccountRepository';
 import { FindAccountByEmailRepository } from 'src/database/interfaces/FindAccountByEmailRepository';
 import { PatchAccountRepository } from 'src/database/interfaces/patchAccountRepository';

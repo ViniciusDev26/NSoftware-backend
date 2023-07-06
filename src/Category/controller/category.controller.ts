@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CategoryDTO } from '../dto/category.dto';
+import { getCategoriesDTO } from '../dto/get-categories.dto';
 import { CategorySerivce } from '../service/category.service';
 
 @Controller('/categories')
@@ -21,8 +22,7 @@ export class CategoryController {
   }
 
   @Get('/')
-  async getCategories(@Query('companyId') companyId: string) {
-    const data: Partial<CategoryDTO> = { companyId };
+  async getCategories(@Query() data: getCategoriesDTO) {
     const returnService = await this.service.get(data);
     return returnService;
   }

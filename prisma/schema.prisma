@@ -71,7 +71,7 @@ model Products {
   id                 String               @unique @default(uuid())
   companyId          String
   name               String
-  value              Int
+  price              Int
   image              String
   onlyCombo          Boolean              @default(false)
   relationRequest    RelationRequest[]

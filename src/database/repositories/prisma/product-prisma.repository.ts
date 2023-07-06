@@ -7,7 +7,7 @@ type datasForRegister = {
   image: any;
   name: string;
   sizeName: string;
-  value: number;
+  price: number;
   onlyCombo: boolean;
 };
 
@@ -31,7 +31,7 @@ type listCombosProps = {
 
 @Injectable()
 export class productPrismaRepository {
-  constructor(private readonly Prisma: PrismaService) {}
+  constructor(private readonly Prisma: PrismaService) { }
 
   async getProducts(body: any) {
     const skip = 10 * (body.page - 1);
@@ -68,7 +68,7 @@ export class productPrismaRepository {
           companyId: params.companyId,
           image: params.image,
           name: params.name,
-          value: params.value,
+          price: params.price,
           onlyCombo: params.onlyCombo,
         },
       });

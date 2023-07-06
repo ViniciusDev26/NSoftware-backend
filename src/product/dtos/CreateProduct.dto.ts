@@ -15,7 +15,7 @@ export abstract class CreateProductDTO {
   @IsNumber()
   @ApiProperty()
   @Type(() => Number)
-  value: number;
+  price: number;
 
   @IsString({ each: true })
   @IsNotEmpty()
