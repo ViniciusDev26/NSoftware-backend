@@ -160,7 +160,7 @@ export class productPrismaRepository {
     return true;
   }
 
-  async deleteProduct(id: string): Promise<void> {
+  async deleteProduct({ id }): Promise<void> {
     try {
       await this.Prisma.products.delete({
         where: {
