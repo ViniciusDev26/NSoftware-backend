@@ -21,7 +21,7 @@ import { productService } from '../services/product.service';
 
 @Controller('/product')
 export class productController {
-  constructor(private readonly ProductService: productService) { }
+  constructor(private readonly ProductService: productService) {}
 
   @Get('/')
   async getProduct(
@@ -82,7 +82,6 @@ export class productController {
 
   @Delete('/:id')
   async deleteProduct(@Param() id: deleteProductDTO) {
-    console.log(id);
     const deletion = await this.ProductService.deleteProduct(id);
 
     return deletion;

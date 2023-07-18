@@ -30,9 +30,7 @@ export class AuthenticateService {
       throw new HttpException('Error - Conta inexistente', HttpStatus.CONFLICT);
     }
 
-    const statusCompany = await this.repository.getStausByCompany(
-      account.email,
-    );
+    const accountDatas = await this.repository.getStausByCompany(account.email);
 
     const isCorrectPassword = await this.hashComparer.comparer(
       account.password,
@@ -52,10 +50,10 @@ export class AuthenticateService {
     };
     const token = this.jwtService.sign(payload);
 
-    if (statusCompany) {
+    if (accountDatas) {
       return {
         accessToken: token,
-        statusCompany,
+        accountDatas,
       };
     }
 

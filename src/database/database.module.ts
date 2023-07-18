@@ -16,6 +16,7 @@ import { getClientsRepository } from './interfaces/getClientsRepository';
 import { SizeRepository } from './repositories/prisma/size-prisma.repository';
 import { FavoritePrismaRepository } from './repositories/prisma/favorite-prisma.repository';
 import { CategoryRepository } from './repositories/prisma/category-prisma.repository';
+import { ChatRepository } from './repositories/prisma/chat-prisma.repository';
 
 @Global()
 @Module({
@@ -43,6 +44,7 @@ import { CategoryRepository } from './repositories/prisma/category-prisma.reposi
     roleRepository,
     FavoritePrismaRepository,
     CategoryRepository,
+    ChatRepository,
   ],
   exports: [
     DeleteAccountByIdRepository,
@@ -60,6 +62,7 @@ import { CategoryRepository } from './repositories/prisma/category-prisma.reposi
     roleRepository,
     FavoritePrismaRepository,
     CategoryRepository,
+    ChatRepository,
   ],
 })
 export class DatabaseModule {}

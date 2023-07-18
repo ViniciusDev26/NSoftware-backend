@@ -29,8 +29,19 @@ model Account {
   role         Role?       @relation(fields: [roleId], references: [id])
   Order        Order[]
   Favorites    Favorites[]
+  Message      Message[]
 
   @@map("accounts")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  userId    String
+  companyId String
+  createdAt DateTime @default(now())
+  user      Account  @relation(fields: [userId], references: [id])
+  company   Companys @relation(fields: [companyId], references: [id])
 }
 
 model Address {
@@ -63,6 +74,7 @@ model Companys {
   Role         Role[] // Alterado de Roles para Role
   Category     Category[]
   Sizes        Sizes[]
+  Message      Message[]
 
   @@map("companies")
 }

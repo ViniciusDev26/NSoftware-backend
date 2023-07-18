@@ -14,6 +14,9 @@ import { stripe } from './Stripe/stripe.module';
 import { favoriteModule } from './Favorite/favorite.module';
 import { CategoryModule } from './Category/category.module';
 import { AmazonModule } from './AmazonS3/amazon.module';
+import { ChatModule } from './Chat/chat.module';
+import { SocketGateway } from './socket.gateway'; // Importe o SocketGateway
+import { ChatController } from './Chat/Cotrollers/Chat.Controller';
 
 @Module({
   imports: [
@@ -32,8 +35,9 @@ import { AmazonModule } from './AmazonS3/amazon.module';
     favoriteModule,
     CategoryModule,
     AmazonModule,
+    ChatModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [ChatController],
+  providers: [SocketGateway],
 })
 export class AppModule {}
